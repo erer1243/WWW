@@ -10,6 +10,6 @@ public class Payment {
     public Payment() {
         amount = 0;
         date = null;
-        name = null;
+        name = "";
     }
 }

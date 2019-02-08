@@ -12,5 +12,7 @@ public class Order {
     int price;
     Date promiseDate;
     
-    
+    public Order() {
+        number = 0;
+    }
 }

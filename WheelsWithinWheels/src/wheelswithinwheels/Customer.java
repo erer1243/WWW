@@ -7,4 +7,8 @@ public class Customer {
     
     Payment[] payments;
     int[] orderNumbers;
+    
+    public Customer() {
+        number = 0;
+    }
 }

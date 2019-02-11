@@ -4,30 +4,22 @@ import java.util.ArrayList;
 
 public class PriceTable {
     
-    public PriceTable() {}
-    
     protected ArrayList<RepairPrice> priceList;
     
-    public RepairPrice getPrice (String brand, String tier) {
-        for (RepairPrice row : priceList) {
-            if (row.brand.equals(brand) && row.tier.equals(tier)) {
-                return row;
-            }
-        }
+    public RepairPrice getPrice(String brand, String tier) {
+        for (RepairPrice price : priceList)
+            if (price.brand.equals(brand) && price.tier.equals(tier))
+                return price;
+                   
         return null;
     }
     
-    public void setPrice (String brand, String tier, int price, int days) {
-        RepairPrice line = getPrice(brand, tier);
-        if (line != null) {
-            line.price = price;
-            line.days = days;
-        } else {
+    public void setPrice(String brand, String tier, int price, int days) {
+        RepairPrice currentPrice = getPrice(brand, tier);
+        if (currentPrice != null) {
+            currentPrice.price = price;
+            currentPrice.days = days;
+        } else 
             priceList.add(new RepairPrice(brand, tier, price, days));
-        }
-    }
-    
-    public ArrayList<RepairPrice> getArray () {
-        return priceList;
     }
 }

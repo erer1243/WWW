@@ -6,7 +6,7 @@ public class RepairPrice {
     int price;
     int days;
     
-    public RepairPrice (String brand, String tier, int price, int days) {
+    public RepairPrice(String brand, String tier, int price, int days) {
         this.brand = brand;
         this.tier = tier;
         this.price = price;

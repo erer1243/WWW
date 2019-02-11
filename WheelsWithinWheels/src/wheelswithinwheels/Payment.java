@@ -7,9 +7,9 @@ public class Payment {
     final Date date;
     final String name;
     
-    public Payment() {
-        amount = 0;
-        date = null;
-        name = "";
+    public Payment(int amount, Date date, String name) {
+        this.amount = amount;
+        this.date = date;
+        this.name = name;
     }
 }

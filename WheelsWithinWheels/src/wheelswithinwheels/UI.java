@@ -1,5 +1,6 @@
 package wheelswithinwheels;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -56,14 +57,15 @@ public class UI {
         return true;
     }
     
-    public void run() {
+    public void run() throws IOException {
         // Running breaks when parseLine returns false
         while (parseLine(getInputLine()));
     }
     
-    protected String getInputLine() {
+    protected String getInputLine() throws IOException {
         System.out.print("> ");
-        return System.console().readLine();
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        return br.readLine();
     }
     
     protected String[] splitStringIntoParts(String input) {
@@ -84,7 +86,11 @@ public class UI {
     }
     
     public void addRepairPrice(String[] args) {
+        //assuming no user error for now
+        int price = Integer.parseInt(args[3]);
+        int days = Integer.parseInt(args[4]);
         
+        priceTable.setPrice(args[1], args[2], price, days);
     }
     
     public void addCustomer(String[] args) {

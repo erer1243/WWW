@@ -87,7 +87,7 @@ public class UI {
         int price = Integer.parseInt(args[3]);
         int days = Integer.parseInt(args[4]);
         
-        bikeShop.setPrice(args[1], args[2], price, days);
+        bikeShop.addRepairPrice(args[1], args[2], price, days);
     }
     
     public void addCustomer(String[] args) {

@@ -8,25 +8,34 @@ public class BikeShop {
     protected ArrayList<Customer> customers = new ArrayList<Customer>();
     
     
-    protected int nextOrderNumber () {
-        return orders.size();
-    }
-    
-    public void setPrice(String brand, String tier, int price, int days) {
+    public void addRepairPrice (String brand, String tier, int price, int days) {
         priceTable.setPrice(brand, tier, price, days);
     }
     
-    public void addOrder (int customerNumber, Date date, String brand, String tier, String commment) {
+    public void addCustomer (String firstName, String lastName) {
+        customers.add(new Customer(
+                customers.size(),
+                firstName,
+                lastName
+        ));
+    }
+    
+    
+    public void addOrder (int customerNumber, Date date, String brand, String tier, String comment) {
         RepairPrice row = priceTable.getPrice(brand, tier);
+        int orderNumber = orders.size();
         
         orders.add(new Order(
-                nextOrderNumber(),
+                orderNumber,
                 customerNumber,
                 row.brand,
                 row.tier,
                 row.price,
                 date,
-                row.days    
+                row.days,
+                comment
         ));
+        
+        customers.get(customerNumber).orderNumbers.add(orderNumber);
     }
 }

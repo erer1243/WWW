@@ -14,7 +14,18 @@ public class UI {
         + "addc <first name> <last name> - add new customer\n"
         + "addo <customer number> <date> <brand> <level> <comment> - add new order\n"
         + "addp <customer number> <date> <amount> - add new payment\n"
-        + "[rest of help message here, follow this format]"; 
+        + "comp <order number> <completion date> - mark order as completed\n"
+        + "printrp - print repair prices\n"
+        + "printcnum - print customers by ID number\n"
+        + "printcname - print customers by name\n"
+        + "printo - print orders\n"
+        + "printp - print payments\n"
+        + "printt - print transactions\n"
+        + "printr - print receivables\n"
+        + "prints - print statements\n"
+        + "readc <filename> - read commands from disk file filename\n"
+        + "savebs <filename> - save bike shop as a file of commands in file filename\n"
+        + "restorebs <filename> - restore a previously saved bike shop file from file filename";
     
     protected BikeShop bikeShop = new BikeShop();
     

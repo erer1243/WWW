@@ -88,10 +88,10 @@ public class UI {
     
     public void addRepairPrice(String[] args) {
         //assuming no user error for now
-        int price = Integer.parseInt(args[3]);
-        int days = Integer.parseInt(args[4]);
+        int price = Integer.parseInt(args[2]);
+        int days = Integer.parseInt(args[3]);
         
-        bikeShop.addRepairPrice(args[1], args[2], price, days);
+        bikeShop.addRepairPrice(args[0], args[1], price, days);
     }
     
     public void addCustomer(String[] args) {

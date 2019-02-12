@@ -110,5 +110,10 @@ public class UI {
     
     public void addPayment(String[] args) {
         //assuming no user error
+        int customerNumber = Integer.parseInt(args[0]);
+        Date date = Formatter.date(Integer.parseInt(args[1]));
+        int amount = Integer.parseInt(args[2]);
+        
+        bikeShop.addPayment(customerNumber, date, amount);
     }
 }

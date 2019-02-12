@@ -8,12 +8,11 @@ public class UI {
     protected final String helpMessage 
         = "quit - quit bike system\n"
         + "help - print this help message\n"
-        + "addrp brand level price days - add repair price\n"
+        + "help <command> - prints more detailed information about a specific command\n"
+        + "addrp <brand> <tier> <price> <days> - add or update repair price\n"
         + "[rest of help message here, follow this format]"; 
     
-    protected PriceTable priceTable = new PriceTable();
-    protected ArrayList<Order> orders = new ArrayList<Order>();
-    protected ArrayList<Customer> customers = new ArrayList<Customer>();
+    protected BikeShop bikeShop = new BikeShop();
     
     // Returns true if the program should continue, false on quit
     public boolean parseLine(String line) {
@@ -73,9 +72,7 @@ public class UI {
     }
    
     protected void reset() {
-        priceTable = new PriceTable();
-        orders = new ArrayList<Order>();
-        customers = new ArrayList<Customer>();
+        bikeShop = new BikeShop();
         
         System.out.println("Data records reset");
     }
@@ -90,7 +87,7 @@ public class UI {
         int price = Integer.parseInt(args[3]);
         int days = Integer.parseInt(args[4]);
         
-        priceTable.setPrice(args[1], args[2], price, days);
+        bikeShop.priceTable.setPrice(args[1], args[2], price, days);
     }
     
     public void addCustomer(String[] args) {

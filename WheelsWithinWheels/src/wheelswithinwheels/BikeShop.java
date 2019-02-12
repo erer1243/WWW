@@ -4,8 +4,8 @@ import java.util.Date;
 
 public class BikeShop {
     protected PriceTable priceTable = new PriceTable();
-    protected ArrayList<Order> orders = new ArrayList<Order>();
-    protected ArrayList<Customer> customers = new ArrayList<Customer>();
+    protected ArrayList<Order> orders = new ArrayList<>();
+    protected ArrayList<Customer> customers = new ArrayList<>();
     
     
     public void addRepairPrice (String brand, String tier, int price, int days) {

@@ -3,13 +3,13 @@ package wheelswithinwheels;
 import java.util.Date;
 
 public class Payment {
-    final int amount;
     final Date date;
-    final String name;
+    final int amount;
+
     
-    public Payment(int amount, Date date, String name) {
-        this.amount = amount;
+    public Payment(Date date, int amount) {
+
         this.date = date;
-        this.name = name;
+        this.amount = amount;
     }
 }

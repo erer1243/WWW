@@ -38,4 +38,8 @@ public class BikeShop {
         
         customers.get(customerNumber).orderNumbers.add(orderNumber);
     }
+    
+    public void addPayment (int customerNumber, Date date, int amount) {
+        customers.get(customerNumber).payments.add(new Payment(date, amount));
+    }
 }

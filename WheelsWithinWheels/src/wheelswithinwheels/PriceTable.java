@@ -22,4 +22,8 @@ public class PriceTable {
         } else 
             priceList.add(new RepairPrice(brand, tier, price, days));
     }
+    
+    public ArrayList<RepairPrice> getAll () {
+        return priceList;
+    }
 }

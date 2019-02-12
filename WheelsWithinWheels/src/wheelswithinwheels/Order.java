@@ -9,9 +9,12 @@ public class Order {
     String tier;
     Date startDate;
     String comment;
-    
     int price;
+    
     Date promiseDate;
+    
+    Date completedDate = null;
+    
     
     public Order(int number, int customer, String brand, String tier, int price, Date startDate, int days, String comment) {
         this.number = number;

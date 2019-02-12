@@ -3,6 +3,7 @@ package wheelswithinwheels;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 
 public class UI {
     protected final String helpMessage 
@@ -10,6 +11,9 @@ public class UI {
         + "help - print this help message\n"
         + "help <command> - prints more detailed information about a specific command\n"
         + "addrp <brand> <tier> <price> <days> - add or update repair price\n"
+        + "addc <first name> <last name> - add new customer\n"
+        + "addo <customer number> <date> <brand> <level> <comment> - add new order\n"
+        + "addp <customer number> <date> <amount> - add new payment\n"
         + "[rest of help message here, follow this format]"; 
     
     protected BikeShop bikeShop = new BikeShop();
@@ -91,14 +95,20 @@ public class UI {
     }
     
     public void addCustomer(String[] args) {
+        //assuming no user error
+        bikeShop.addCustomer(args[0], args[1]);
         
     }
     
     public void addOrder(String[] args) {
+        //assuming no user error
+        int customerNumber = Integer.parseInt(args[0]);
+        Date date = Formatter.date(Integer.parseInt(args[1]));
         
+        bikeShop.addOrder(customerNumber, date, args[2], args[3], "");
     }
     
     public void addPayment(String[] args) {
-        
+        //assuming no user error
     }
 }

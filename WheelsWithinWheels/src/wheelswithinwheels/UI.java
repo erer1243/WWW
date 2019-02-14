@@ -32,7 +32,7 @@ public class UI {
     // Returns true if the program should continue, false on quit
     public boolean parseLine(String line) {
         String[] commandParts = splitStringIntoParts(line);
-        String command = commandParts[0];
+        
         String[] args = Arrays.copyOfRange(commandParts, 1, commandParts.length);
         
         switch (commandParts[0]) {
@@ -78,6 +78,8 @@ public class UI {
     
     protected String getInputLine() throws IOException {
         System.out.print("> ");
+        
+        // This makes input work in netbeans
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         return br.readLine();
     }

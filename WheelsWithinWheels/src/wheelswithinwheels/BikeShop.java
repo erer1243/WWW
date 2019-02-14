@@ -8,11 +8,11 @@ public class BikeShop {
     protected ArrayList<Customer> customers = new ArrayList<>();
     
     
-    public void addRepairPrice (String brand, String tier, int price, int days) {
+    public void addRepairPrice(String brand, String tier, int price, int days) {
         priceTable.setPrice(brand, tier, price, days);
     }
     
-    public void addCustomer (String firstName, String lastName) {
+    public void addCustomer(String firstName, String lastName) {
         customers.add(new Customer(
                 customers.size(),
                 firstName,
@@ -20,8 +20,7 @@ public class BikeShop {
         ));
     }
     
-    
-    public void addOrder (int customerNumber, Date date, String brand, String tier, String comment) {
+    public void addOrder(int customerNumber, Date date, String brand, String tier, String comment) {
         RepairPrice row = priceTable.getPrice(brand, tier);
         int orderNumber = orders.size();
         
@@ -39,16 +38,15 @@ public class BikeShop {
         customers.get(customerNumber).orderNumbers.add(orderNumber);
     }
     
-    public void addPayment (int customerNumber, Date date, int amount) {
+    public void addPayment(int customerNumber, Date date, int amount) {
         customers.get(customerNumber).payments.add(new Payment(date, amount));
     }
     
-    public void markComplete (int orderNumber, Date date) {
+    public void markComplete(int orderNumber, Date date) {
         orders.get(orderNumber).completedDate = date;
     }
     
-    public ArrayList<RepairPrice> getPrices () {
+    public ArrayList<RepairPrice> getPrices() {
         return priceTable.getAll();
     }
-    
 }

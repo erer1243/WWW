@@ -14,11 +14,10 @@ public class PriceTable {
         return null;
     }
     
-    public void setPrice(String brand, String tier, int price, int days) {
+    public void addPrice(String brand, String tier, int price, int days) {
         RepairPrice currentPrice = getPrice(brand, tier);
         if (currentPrice != null) {
-            currentPrice.price = price;
-            currentPrice.days = days;
+            return;
         } else 
             priceList.add(new RepairPrice(brand, tier, price, days));
     }

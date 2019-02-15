@@ -35,16 +35,15 @@ public class BikeShop {
                 comment
         ));
         
-        //customerNumber starts with 1 (calculated using length not index)
-        customers.get(customerNumber - 1).orderNumbers.add(orderNumber);
+        customers.get(customerNumber).orderNumbers.add(orderNumber);
     }
     
     public void addPayment(int customerNumber, Date date, int amount) {
-        customers.get(customerNumber - 1).payments.add(new Payment(date, amount));
+        customers.get(customerNumber).payments.add(new Payment(date, amount));
     }
     
     public void markComplete(int orderNumber, Date date) {
-        orders.get(orderNumber - 1).completedDate = date;
+        orders.get(orderNumber).completedDate = date;
     }
     
     public ArrayList<RepairPrice> getPrices() {

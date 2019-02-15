@@ -60,6 +60,10 @@ public class UI {
                 addPayment(args);
                 break;
                 
+            case "comp":
+                markComplete(args);
+                break;
+                
             case "":
                 break;
             
@@ -128,5 +132,13 @@ public class UI {
         int amount = Integer.parseInt(args[2]);
         
         bikeShop.addPayment(customerNumber, date, amount);
+    }
+    
+    public void markComplete(String[] args) {
+        //assuming no user error
+        int orderNumber = Integer.parseInt(args[0]);
+        Date date = Formatter.date(Integer.parseInt(args[1]));
+        
+        bikeShop.markComplete(orderNumber, date);
     }
 }

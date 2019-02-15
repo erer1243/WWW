@@ -3,8 +3,7 @@ import java.util.ArrayList;
 
 public class Customer {
     final int number;
-    String firstName;
-    String lastName;
+    String firstName, lastName;
     
     ArrayList<Payment> payments = new ArrayList<>();
     ArrayList<Integer> orderNumbers = new ArrayList<>();

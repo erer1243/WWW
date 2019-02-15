@@ -1,7 +1,6 @@
 package wheelswithinwheels;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 
@@ -30,10 +29,9 @@ public class UI {
     protected BikeShop bikeShop = new BikeShop();
     
     // Returns true if the program should continue, false on quit
-    public boolean parseLine(String line) throws IOException {
-        String[] commandParts = splitStringIntoParts(line);
-        
-        String[] args = Arrays.copyOfRange(commandParts, 1, commandParts.length);
+    public boolean parseLine(String line) {
+        String[] commandParts = splitStringIntoParts(line),
+                 args = Arrays.copyOfRange(commandParts, 1, commandParts.length);
         
         switch (commandParts[0]) {
             case "help":
@@ -81,7 +79,6 @@ public class UI {
             
             default:
                 System.out.println("Unknown command " + commandParts[0]);
-            
         }
         
         return true;

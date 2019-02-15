@@ -7,7 +7,6 @@ public class BikeShop {
     protected ArrayList<Order> orders = new ArrayList<>();
     protected ArrayList<Customer> customers = new ArrayList<>();
     
-    
     public void addRepairPrice(String brand, String tier, int price, int days) {
         priceTable.addPrice(brand, tier, price, days);
     }

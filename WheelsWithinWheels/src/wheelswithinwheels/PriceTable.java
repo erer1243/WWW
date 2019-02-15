@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class PriceTable {
     
-    protected ArrayList<RepairPrice> priceList;
+    protected ArrayList<RepairPrice> priceList = new ArrayList<>();
     
     public RepairPrice getPrice(String brand, String tier) {
         for (RepairPrice price : priceList)

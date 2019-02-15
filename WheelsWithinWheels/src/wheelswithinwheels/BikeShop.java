@@ -35,7 +35,8 @@ public class BikeShop {
                 comment
         ));
         
-        customers.get(customerNumber).orderNumbers.add(orderNumber);
+        //customerNumber starts with 1 (calculated using length not index)
+        customers.get(customerNumber - 1).orderNumbers.add(orderNumber);
     }
     
     public void addPayment(int customerNumber, Date date, int amount) {

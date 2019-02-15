@@ -6,8 +6,8 @@ public class Customer {
     String firstName;
     String lastName;
     
-    ArrayList<Payment> payments;
-    ArrayList<Integer> orderNumbers;
+    ArrayList<Payment> payments = new ArrayList<>();
+    ArrayList<Integer> orderNumbers = new ArrayList<>();
     
     public Customer(int number, String firstName, String lastName) {
         this.number = number;

@@ -72,5 +72,7 @@ public class BikeShop {
         for (Order order : orders) {
             output += "addo " + order.customer + " " + order.startDate + " " + order.brand + " " + order.tier + " " + order.comment + "\n";
         }
+        
+        return output;
     }
 }

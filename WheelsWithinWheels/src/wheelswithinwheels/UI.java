@@ -29,7 +29,7 @@ public class UI {
     protected BikeShop bikeShop = new BikeShop();
     
     // Returns true if the program should continue, false on quit
-    public boolean parseLine(String line) {
+    public boolean parseLine(String line) throws IOException {
         String[] commandParts = splitStringIntoParts(line),
                  args = Arrays.copyOfRange(commandParts, 1, commandParts.length);
         

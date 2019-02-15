@@ -1,18 +1,22 @@
 package wheelswithinwheels;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Date;
 
 public class BikeShop {
     protected PriceTable priceTable = new PriceTable();
-    protected ArrayList<Order> orders = new ArrayList<>();
-    protected ArrayList<Customer> customers = new ArrayList<>();
+    protected HashMap<Integer, Order> orders = new HashMap<>();
+    protected HashMap<Integer, Customer> customers = new HashMap<>();
+    
+    protected int customerCounter = 0;
+    protected int orderCounter = 0;
     
     public void addRepairPrice(String brand, String tier, int price, int days) {
         priceTable.addPrice(brand, tier, price, days);
     }
     
     public void addCustomer(String firstName, String lastName) {
-        customers.add(new Customer(
+        customers.put(customerCounter++, new Customer(
                 customers.size(),
                 firstName,
                 lastName
@@ -23,7 +27,7 @@ public class BikeShop {
         RepairPrice row = priceTable.getPrice(brand, tier);
         int orderNumber = orders.size();
         
-        orders.add(new Order(
+        orders.put(orderCounter++, new Order(
                 orderNumber,
                 customerNumber,
                 row.brand,
@@ -59,7 +63,9 @@ public class BikeShop {
             output += "addrp " + " " +  row.brand + " " +  row.tier + " " +  row.price + " " +  row.days + "\n";
         }
         
-        for (Customer customer : customers) {
+        for (int i : customers.keySet()) {
+            Customer customer = customers.get(i);
+            output += "rncn " + i + "\n";
             output += "addc "  +  customer.firstName + " " +  customer.lastName + "\n";
             
             for (Payment payment : customer.payments) {
@@ -67,8 +73,14 @@ public class BikeShop {
             }
         }
         
-        for (Order order : orders) {
+        for (int i : orders.keySet()) {
+            Order order = orders.get(i);
+            output += "rnon " + i + "\n";
             output += "addo " + order.customer + " " + order.startDate + " " + order.brand + " " + order.tier + " " + order.comment + "\n";
+            
+            if (order.completedDate != null) {
+                output += "comp " + order.number + " " + Formatter.date(order.completedDate) + "\n";
+            }
         }
         
         return output;

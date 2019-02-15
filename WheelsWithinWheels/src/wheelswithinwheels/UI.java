@@ -30,7 +30,7 @@ public class UI {
     protected BikeShop bikeShop = new BikeShop();
     
     // Returns true if the program should continue, false on quit
-    public boolean parseLine(String line) {
+    public boolean parseLine(String line) throws IOException {
         String[] commandParts = splitStringIntoParts(line);
         
         String[] args = Arrays.copyOfRange(commandParts, 1, commandParts.length);
@@ -63,6 +63,18 @@ public class UI {
             case "comp":
                 markComplete(args);
                 break;
+            
+            case "readc":
+                readScript(args);
+                break;    
+                
+            case "savebs":
+                saveState(args);
+                break;  
+                
+            case "restorebs":
+                restoreState(args);
+                break;   
                 
             case "":
                 break;
@@ -140,5 +152,23 @@ public class UI {
         Date date = Formatter.date(Integer.parseInt(args[1]));
         
         bikeShop.markComplete(orderNumber, date);
+    }
+    
+    public void readScript (String[] args) throws FileNotFoundException, IOException {
+        BufferedReader br = new BufferedReader (new FileReader(args[0]));
+        String line = null;
+        while ((line = br.readLine()) != null) {
+            parseLine(line);
+        }
+    }
+    
+    public void saveState (String[] args) throws FileNotFoundException, UnsupportedEncodingException, IOException {
+        Writer bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(args[0]), "utf-8"));
+        bw.write(bikeShop.saveState());
+    }
+    
+    public void restoreState (String[] args) throws IOException {
+        bikeShop = new BikeShop();
+        readScript(args);
     }
 }

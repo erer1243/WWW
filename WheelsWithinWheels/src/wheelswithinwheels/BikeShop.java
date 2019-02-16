@@ -63,9 +63,9 @@ public class BikeShop {
             output += "addrp " + " " +  row.brand + " " +  row.tier + " " +  row.price + " " +  row.days + "\n";
         }
         
-        for (int i : customers.keySet()) {
-            Customer customer = customers.get(i);
-            output += "rncn " + i + "\n";
+        for (int index : customers.keySet()) {
+            Customer customer = customers.get(index);
+            output += "rncn " + index + "\n";
             output += "addc "  +  customer.firstName + " " +  customer.lastName + "\n";
             
             for (Payment payment : customer.payments) {
@@ -73,9 +73,9 @@ public class BikeShop {
             }
         }
         
-        for (int i : orders.keySet()) {
-            Order order = orders.get(i);
-            output += "rnon " + i + "\n";
+        for (int index : orders.keySet()) {
+            Order order = orders.get(index);
+            output += "rnon " + index + "\n";
             output += "addo " + order.customer + " " + order.startDate + " " + order.brand + " " + order.tier + " " + order.comment + "\n";
             
             if (order.completedDate != null) {

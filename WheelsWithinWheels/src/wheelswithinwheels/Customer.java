@@ -13,4 +13,12 @@ public class Customer {
         this.firstName = firstName;
         this.lastName = lastName;
     }
+    
+    public int balance () {
+        int sum = 0;
+        for (Payment payment : payments) {
+            sum += payment.amount;
+        }
+        return sum;
+    }
 }

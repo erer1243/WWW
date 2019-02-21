@@ -24,4 +24,12 @@ public class PriceTable {
     public ArrayList<RepairPrice> getAll() {
         return priceList;
     }
+    
+    public String toString() {
+        String printString = "";
+        for (RepairPrice rp: priceList) {
+            printString += rp.toString() + "\n";
+        }
+        return printString;
+    }
 }

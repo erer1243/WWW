@@ -53,6 +53,10 @@ public class BikeShop {
         return priceTable.getAll();
     }
     
+    public String printRepairPrices() {
+        return priceTable.toString();
+    }
+    
     public String saveState () {
         String output = "";
         /*"addrp <brand> <tier> <price> <days> - add or update repair price\n"

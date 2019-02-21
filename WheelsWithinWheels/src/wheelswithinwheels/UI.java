@@ -72,7 +72,11 @@ public class UI {
                 
             case "restorebs":
                 restoreState(args);
-                break;   
+                break;
+                
+            case "printrp":
+                printRepairPrices();
+                break;
                 
             case "":
                 break;
@@ -149,6 +153,10 @@ public class UI {
         Date date = Formatter.date(Integer.parseInt(args[1]));
         
         bikeShop.markComplete(orderNumber, date);
+    }
+    
+    public void printRepairPrices() {
+        System.out.println(bikeShop.printRepairPrices());
     }
     
     public void readScript (String[] args) throws FileNotFoundException, IOException {

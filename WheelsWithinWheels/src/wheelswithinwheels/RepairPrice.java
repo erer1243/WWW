@@ -10,4 +10,8 @@ public class RepairPrice {
         this.price = price;
         this.days = days;
     }
+    
+    public String toString() {
+        return brand + "\t" + tier + "\t" + price + "\t" + days;
+    }
 }

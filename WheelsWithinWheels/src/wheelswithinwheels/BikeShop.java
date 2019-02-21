@@ -57,6 +57,25 @@ public class BikeShop {
         return priceTable.toString();
     }
     
+    public String printOrders() {
+        String orderString = "";
+        for (HashMap.Entry<Integer, Order> entry : orders.entrySet()) {
+            Integer number = entry.getKey();
+            Order order = entry.getValue();
+            Customer customer = customers.get(order.customer);
+            
+            orderString += order.number + "\t" 
+                    + customer.toString() + "\t\t" 
+                    + order.brand + "\t" 
+                    + order.tier + "\t" 
+                    + order.price + "\t" 
+                    /*+ order.promiseDate + "\t"*/ 
+                    /*+ order.completedDate */
+                    + "\n";
+        }
+        return orderString;
+    }
+    
     public String saveState () {
         String output = "";
         /*"addrp <brand> <tier> <price> <days> - add or update repair price\n"

@@ -78,6 +78,10 @@ public class UI {
                 printRepairPrices();
                 break;
                 
+            case "printo":
+                printOrders();
+                break;
+                
             case "":
                 break;
             
@@ -157,6 +161,10 @@ public class UI {
     
     public void printRepairPrices() {
         System.out.println(bikeShop.printRepairPrices());
+    }
+    
+    public void printOrders() {
+        System.out.println(bikeShop.printOrders());
     }
     
     public void readScript (String[] args) throws FileNotFoundException, IOException {

@@ -21,4 +21,8 @@ public class Customer {
         }
         return sum;
     }
+    
+    public String toString() {
+        return firstName + " "  + lastName;
+    }
 }

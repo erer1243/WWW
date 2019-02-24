@@ -109,6 +109,8 @@ public class UI {
         return input.split("\\s+");
     }
    
+    
+    
     protected void reset() {
         bikeShop = new BikeShop();
         
@@ -160,11 +162,26 @@ public class UI {
     }
     
     public void printRepairPrices() {
-        System.out.println(bikeShop.printRepairPrices());
+        for (RepairPrice row : bikeShop.getRepairPrices()) {
+            System.out.println(row);
+        }
     }
     
     public void printOrders() {
-        System.out.println(bikeShop.printOrders());
+        String orderString = "";
+        for (Order order : bikeShop.getOrders()) {
+            Customer customer = bikeShop.getCustomer(order.customer);
+            
+            orderString += order.number + "\t" 
+                    + customer.toString() + "\t\t" 
+                    + order.brand + "\t" 
+                    + order.tier + "\t" 
+                    + order.price + "\t" 
+                    /*+ order.promiseDate + "\t"*/ 
+                    /*+ order.completedDate */
+                    + "\n";
+        }
+        System.out.println(orderString);
     }
     
     public void readScript (String[] args) throws FileNotFoundException, IOException {

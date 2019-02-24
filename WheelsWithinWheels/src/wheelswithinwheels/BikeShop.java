@@ -1,5 +1,6 @@
 package wheelswithinwheels;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Date;
 
@@ -23,7 +24,7 @@ public class BikeShop {
         ));
     }
     
-    public void addOrder(int customerNumber, Date date, String brand, String tier, String comment) {
+    public void addOrder (int customerNumber, Date date, String brand, String tier, String comment) {
         RepairPrice row = priceTable.getPrice(brand, tier);
         int orderNumber = orders.size();
         
@@ -41,39 +42,28 @@ public class BikeShop {
         customers.get(customerNumber).orderNumbers.add(orderNumber);
     }
     
-    public void addPayment(int customerNumber, Date date, int amount) {
+    public void addPayment (int customerNumber, Date date, int amount) {
         customers.get(customerNumber).payments.add(new Payment(date, amount));
+    }
+    
+    public Order getOrder (int orderNumber) {
+        return orders.get(orderNumber);
+    }
+    
+    public Customer getCustomer (int customerNumber) {
+        return customers.get(customerNumber);
     }
     
     public void markComplete(int orderNumber, Date date) {
         orders.get(orderNumber).completedDate = date;
     }
     
-    public ArrayList<RepairPrice> getPrices() {
+    public ArrayList<RepairPrice> getRepairPrices() {
         return priceTable.getAll();
     }
     
-    public String printRepairPrices() {
-        return priceTable.toString();
-    }
-    
-    public String printOrders() {
-        String orderString = "";
-        for (HashMap.Entry<Integer, Order> entry : orders.entrySet()) {
-            Integer number = entry.getKey();
-            Order order = entry.getValue();
-            Customer customer = customers.get(order.customer);
-            
-            orderString += order.number + "\t" 
-                    + customer.toString() + "\t\t" 
-                    + order.brand + "\t" 
-                    + order.tier + "\t" 
-                    + order.price + "\t" 
-                    /*+ order.promiseDate + "\t"*/ 
-                    /*+ order.completedDate */
-                    + "\n";
-        }
-        return orderString;
+    public Collection<Order> getOrders() {
+        return orders.values();
     }
     
     public String saveState () {

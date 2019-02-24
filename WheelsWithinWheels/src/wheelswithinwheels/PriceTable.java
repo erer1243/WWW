@@ -25,11 +25,4 @@ public class PriceTable {
         return priceList;
     }
     
-    public String toString() {
-        String printString = "";
-        for (RepairPrice rp: priceList) {
-            printString += rp.toString() + "\n";
-        }
-        return printString;
-    }
 }

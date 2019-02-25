@@ -3,6 +3,7 @@ package wheelswithinwheels;
 import java.io.*;
 import java.util.Arrays;
 import java.util.Date;
+import javafx.util.Pair;
 
 public class UI {
     protected final String helpMessage 
@@ -141,7 +142,11 @@ public class UI {
         int customerNumber = Integer.parseInt(args[0]);
         Date date = Formatter.date(Integer.parseInt(args[1]));
         
-        bikeShop.addOrder(customerNumber, date, args[2], args[3], "");
+        try {
+            bikeShop.addOrder(customerNumber, date, args[2], args[3], "");
+        } catch (NullPointerException e) {
+           System.out.println("The inputted " + e.getMessage() + " is invalid.");
+        }
     }
     
     public void addPayment(String[] args) {
@@ -169,8 +174,9 @@ public class UI {
     
     public void printOrders() {
         String orderString = "";
-        for (Order order : bikeShop.getOrders()) {
-            Customer customer = bikeShop.getCustomer(order.customer);
+        for (Pair<Order, Customer> pair : bikeShop.getOrders()) {
+            Order order = pair.getKey();
+            Customer customer = pair.getValue();
             
             orderString += order.number + "\t" 
                     + customer.toString() + "\t\t" 
@@ -198,7 +204,7 @@ public class UI {
     }
     
     public void restoreState (String[] args) throws IOException {
-        bikeShop = new BikeShop();
+        reset();
         readScript(args);
     }
 }

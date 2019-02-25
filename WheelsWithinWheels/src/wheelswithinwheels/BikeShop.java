@@ -3,6 +3,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Date;
+import javafx.util.Pair;
+import java.lang.Exception;
 
 public class BikeShop {
     protected PriceTable priceTable = new PriceTable();
@@ -24,11 +26,21 @@ public class BikeShop {
         ));
     }
     
-    public void addOrder (int customerNumber, Date date, String brand, String tier, String comment) {
+    public void addOrder (int customerNumber, Date date, String brand, String tier, String comment) throws NullPointerException {
+        Customer customer = customers.get(customerNumber);
         RepairPrice row = priceTable.getPrice(brand, tier);
-        int orderNumber = orders.size();
+        if (customer == null) {
+            throw new NullPointerException("customer");
+        }
+        if (row == null) {
+            throw new NullPointerException("brand or tier");
+        }
         
-        orders.put(orderCounter++, new Order(
+        int orderNumber = orderCounter++;
+
+        customer.orderNumbers.add(orderNumber);
+        
+        orders.put(orderNumber, new Order(
                 orderNumber,
                 customerNumber,
                 row.brand,
@@ -38,8 +50,6 @@ public class BikeShop {
                 row.days,
                 comment
         ));
-        
-        customers.get(customerNumber).orderNumbers.add(orderNumber);
     }
     
     public void addPayment (int customerNumber, Date date, int amount) {
@@ -62,8 +72,12 @@ public class BikeShop {
         return priceTable.getAll();
     }
     
-    public Collection<Order> getOrders() {
-        return orders.values();
+    public ArrayList<Pair<Order, Customer>> getOrders() {
+        ArrayList<Pair<Order, Customer>> output = new ArrayList<>();
+        for (Order order : orders.values()) {
+            output.add(new Pair<Order, Customer> (order, customers.get(order.customer)));
+        }
+        return output;
     }
     
     public String saveState () {

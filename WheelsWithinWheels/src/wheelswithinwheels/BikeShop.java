@@ -15,6 +15,9 @@ public class BikeShop {
     protected HashMap<Integer, Customer> customers = new HashMap<>();
     protected int customerCounter = 0;
     
+    public void updateOrderCounter (int newValue) {orderCounter = newValue;}
+    public void updateCustomerCounter (int newValue) {customerCounter = newValue;}
+    
     
     //GETS======================================================================
     

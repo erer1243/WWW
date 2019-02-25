@@ -27,6 +27,8 @@ public class UI {
         + "savebs <filename> - save bike shop as a file of commands in file filename\n"
         + "restorebs <filename> - restore a previously saved bike shop file from file filename";
     
+    boolean restoring = false;
+    
     protected BikeShop bikeShop = new BikeShop();
     
     // Returns true if the program should continue, false on quit
@@ -36,14 +38,14 @@ public class UI {
         
         try{
             switch (commandParts[0]) {
-                case "help":
-                    help();
-                    break;
-
                 case "quit":
                     System.out.println("Goodbye");
                     return false;
-
+                
+                case "help":
+                    help();
+                    break;
+                    
                 case "addrp":
                     addRepairPrice(args);
                     break;
@@ -62,12 +64,32 @@ public class UI {
 
                 case "comp":
                     markComplete(args);
+                    break;    
+                
+                case "printrp":
+                    printRepairPrices(args);
                     break;
 
+                case "printo":
+                    printOrders(args);
+                    break;
+                
+                case "printp":
+                    printPayments(args);
+                    break;
+                
+                case "printt":
+                    printTransactions(args);
+                    break;
+                
+                case "prints":
+                    printStatements(args);
+                    break;
+                
                 case "readc":
                     readScript(args);
-                    break;    
-
+                    break;
+                    
                 case "savebs":
                     saveState(args);
                     break;  
@@ -76,13 +98,11 @@ public class UI {
                     restoreState(args);
                     break;
 
-                case "printrp":
-                    printRepairPrices(args);
-                    break;
-
-                case "printo":
-                    printOrders(args);
-                    break;
+                case "rnon":
+                    if (restoring) {updateOrderCounter(args);}
+                
+                case "rncn":
+                    if (restoring) {updateCustomerCounter(args);}
 
                 case "":
                     break;
@@ -154,7 +174,7 @@ public class UI {
         } catch (NumberFormatException e) {throw new UIParseException(args[2], "price", "number");}
         
         try {days = Integer.parseInt(args[3]);
-        } catch (NumberFormatException e) {throw new UIParseException(args[2], "number of days", "number");}
+        } catch (NumberFormatException e) {throw new UIParseException(args[3], "number of days", "number");}
         
         bikeShop.addRepairPrice(args[0], args[1], price, days);
     }
@@ -188,7 +208,7 @@ public class UI {
         
         Date date;
         try {date = Formatter.date(Integer.parseInt(args[1]));
-        } catch (Exception e) {throw new UIParseException(args[2], "date", "date");}
+        } catch (Exception e) {throw new UIParseException(args[1], "date", "date");}
         
         int amount;
         try {amount = Integer.parseInt(args[2]);
@@ -204,11 +224,11 @@ public class UI {
     public void markComplete (String[] args) throws UIParseException {
         int orderNumber;
         try {orderNumber = Integer.parseInt(args[0]);
-        } catch (NumberFormatException e) {throw new UIParseException(args[2], "order number", "number");}
+        } catch (NumberFormatException e) {throw new UIParseException(args[0], "order number", "number");}
         
         Date date;
         try {date = Formatter.date(Integer.parseInt(args[1]));
-        } catch (Exception e) {throw new UIParseException(args[2], "date", "date");}
+        } catch (Exception e) {throw new UIParseException(args[1], "date", "date");}
         
         try {
             bikeShop.markComplete(orderNumber, date);
@@ -223,9 +243,9 @@ public class UI {
         }
     }
     
-    public void printCustomersByName (String[] args) {}
+    public void printCustomersByName (String[] args) {} //TODO
     
-    public void printCustomersByNumber (String[] args) {}
+    public void printCustomersByNumber (String[] args) {} //TODO
     
     public void printOrders (String[] args) {
         String orderString = "";
@@ -245,29 +265,60 @@ public class UI {
         System.out.println(orderString);
     }
     
-    public void printPayments (String[] args) {}
+    public void printPayments (String[] args) {} //TODO
     
-    public void printTransactions (String[] args) {}
+    public void printTransactions (String[] args) {} //TODO
     
-    public void printReceivables (String[] args) {}
+    public void printReceivables (String[] args) {} //TODO
     
-    public void printStatements (String[] args) {}
+    public void printStatements (String[] args) {} //TODO
     
-    public void readScript (String[] args) throws FileNotFoundException, IOException {
-        BufferedReader br = new BufferedReader (new FileReader(args[0]));
+    public void readScript (String[] args) throws IOException {
+        File file = new File(args[0]);
+        
+        FileReader fileReader = new FileReader(file);
+        
+        BufferedReader reader = new BufferedReader(fileReader);
+        
+        restoring = true;
+        
         String line = null;
-        while ((line = br.readLine()) != null) {
+        while ((line = reader.readLine()) != null) {
             parseLine(line);
         }
+        restoring = false;
     }
      
-    public void saveState (String[] args) throws FileNotFoundException, UnsupportedEncodingException, IOException {
-        Writer bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(args[0]), "utf-8"));
-        bw.write(bikeShop.saveState());
+    public void saveState (String[] args) throws IOException {
+        File file = new File(args[0]);
+        file.createNewFile();
+        
+        FileWriter fileWriter = new FileWriter(file);
+        
+        BufferedWriter writer = new BufferedWriter(fileWriter);
+        
+        writer.write(bikeShop.saveState());
+        writer.close();
     }
     
     public void restoreState (String[] args) throws IOException {
         reset();
         readScript(args);
+    }
+    
+    public void updateOrderCounter (String[] args) throws UIParseException {
+        int orderCounter;
+        try {orderCounter = Integer.parseInt(args[0]);
+        } catch (NumberFormatException e) {throw new UIParseException(args[0], "order counter", "number");}
+        
+        bikeShop.updateOrderCounter(orderCounter);
+    }
+    
+    public void updateCustomerCounter (String[] args) throws UIParseException {
+        int customerCounter;
+        try {customerCounter = Integer.parseInt(args[0]);
+        } catch (NumberFormatException e) {throw new UIParseException(args[0], "customer counter", "number");}
+        
+        bikeShop.updateCustomerCounter(customerCounter);
     }
 }

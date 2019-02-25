@@ -145,17 +145,20 @@ public class UI {
         try {
             bikeShop.addOrder(customerNumber, date, args[2], args[3], "");
         } catch (NullPointerException e) {
-           System.out.println("The inputted " + e.getMessage() + " is invalid.");
+           System.out.println(e.getMessage());
         }
     }
     
     public void addPayment(String[] args) {
-        //assuming no user error
         int customerNumber = Integer.parseInt(args[0]);
         Date date = Formatter.date(Integer.parseInt(args[1]));
         int amount = Integer.parseInt(args[2]);
         
-        bikeShop.addPayment(customerNumber, date, amount);
+        try {
+            bikeShop.addPayment(customerNumber, date, amount);
+        } catch (NullPointerException e) {
+            System.out.println(e.getMessage());
+        }
     }
     
     public void markComplete(String[] args) {

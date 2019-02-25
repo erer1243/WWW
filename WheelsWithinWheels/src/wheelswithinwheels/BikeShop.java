@@ -8,11 +8,56 @@ import java.lang.Exception;
 
 public class BikeShop {
     protected PriceTable priceTable = new PriceTable();
-    protected HashMap<Integer, Order> orders = new HashMap<>();
-    protected HashMap<Integer, Customer> customers = new HashMap<>();
     
-    protected int customerCounter = 0;
+    protected HashMap<Integer, Order> orders = new HashMap<>();
     protected int orderCounter = 0;
+    
+    protected HashMap<Integer, Customer> customers = new HashMap<>();
+    protected int customerCounter = 0;
+    
+    
+    //GETS======================================================================
+    
+    public RepairPrice getRepairPrice (String brand, String tier) throws NullPriceException {
+        RepairPrice row = priceTable.getPrice(brand, tier);
+        if (row == null) {
+            throw new NullPriceException(brand, tier);
+        }
+        return row;
+    }
+    
+    public Order getOrder (int orderNumber) throws NullOrderException {
+        Order order = orders.get(orderNumber);
+        if (order == null) {
+            throw new NullOrderException(orderNumber);
+        }
+        return order;
+    }
+    
+    public Customer getCustomer (int customerNumber) throws NullCustomerException {
+        Customer customer = customers.get(customerNumber);
+        if (customer == null) {
+            throw new NullCustomerException(customerNumber);
+        }
+        return customer;
+    }
+    
+    //GET MULTIPLE==============================================================
+    
+    public ArrayList<Pair<Order, Customer>> getOrders() {
+        ArrayList<Pair<Order, Customer>> output = new ArrayList<>();
+        for (Order order : orders.values()) {
+            output.add(new Pair<Order, Customer> (order, customers.get(order.customer)));
+        }
+        return output;
+    }
+    
+    public ArrayList<RepairPrice> getRepairPrices() {
+        return priceTable.getAll();
+    }
+    
+    //ADDS======================================================================
+    
     
     public void addRepairPrice(String brand, String tier, int price, int days) {
         priceTable.addPrice(brand, tier, price, days);
@@ -26,15 +71,10 @@ public class BikeShop {
         ));
     }
     
-    public void addOrder (int customerNumber, Date date, String brand, String tier, String comment) throws NullPointerException {
-        Customer customer = customers.get(customerNumber);
+    public void addOrder (int customerNumber, Date date, String brand, String tier, String comment) throws NullCustomerException, NullPriceException {
+        Customer customer = getCustomer(customerNumber);
+        
         RepairPrice row = priceTable.getPrice(brand, tier);
-        if (customer == null) {
-            throw new NullPointerException("customer");
-        }
-        if (row == null) {
-            throw new NullPointerException("brand or tier");
-        }
         
         int orderNumber = orderCounter++;
 
@@ -52,33 +92,18 @@ public class BikeShop {
         ));
     }
     
-    public void addPayment (int customerNumber, Date date, int amount) {
-        customers.get(customerNumber).payments.add(new Payment(date, amount));
+    public void addPayment (int customerNumber, Date date, int amount) throws NullCustomerException {
+        Customer customer = getCustomer(customerNumber);
+        customer.payments.add(new Payment(date, amount));
     }
     
-    public Order getOrder (int orderNumber) {
-        return orders.get(orderNumber);
+    //EDITS=====================================================================
+    
+    public void markComplete(int orderNumber, Date date) throws NullOrderException {
+        getOrder(orderNumber).completedDate = date;
     }
     
-    public Customer getCustomer (int customerNumber) {
-        return customers.get(customerNumber);
-    }
-    
-    public void markComplete(int orderNumber, Date date) {
-        orders.get(orderNumber).completedDate = date;
-    }
-    
-    public ArrayList<RepairPrice> getRepairPrices() {
-        return priceTable.getAll();
-    }
-    
-    public ArrayList<Pair<Order, Customer>> getOrders() {
-        ArrayList<Pair<Order, Customer>> output = new ArrayList<>();
-        for (Order order : orders.values()) {
-            output.add(new Pair<Order, Customer> (order, customers.get(order.customer)));
-        }
-        return output;
-    }
+    //FILE INTERACTIONS=========================================================
     
     public String saveState () {
         String output = "";

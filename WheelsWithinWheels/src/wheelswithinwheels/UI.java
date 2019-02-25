@@ -279,14 +279,11 @@ public class UI {
         FileReader fileReader = new FileReader(file);
         
         BufferedReader reader = new BufferedReader(fileReader);
-        
-        restoring = true;
-        
+                
         String line = null;
         while ((line = reader.readLine()) != null) {
             parseLine(line);
         }
-        restoring = false;
     }
      
     public void saveState (String[] args) throws IOException {
@@ -303,7 +300,9 @@ public class UI {
     
     public void restoreState (String[] args) throws IOException {
         reset();
+        restoring = true;
         readScript(args);
+        restoring = false;
     }
     
     public void updateOrderCounter (String[] args) throws UIParseException {

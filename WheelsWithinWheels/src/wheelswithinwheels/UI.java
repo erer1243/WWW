@@ -1,6 +1,7 @@
 package wheelswithinwheels;
 
 import java.io.*;
+import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Date;
 import javafx.util.Pair;
@@ -191,8 +192,8 @@ public class UI {
         } catch (NumberFormatException e) {throw new UIParseException(args[0], "customer number", "number");}
         
         Date date;
-        try {date = Formatter.date(Integer.parseInt(args[1]));
-        } catch (Exception e) {throw new UIParseException(args[1], "date", "date");}
+        try {date = Formatter.date(args[1]);
+        } catch (ParseException e) {throw new UIParseException(args[1], "date", "date");}
         
         try {
             bikeShop.addOrder(customerNumber, date, args[2], args[3], "");
@@ -207,8 +208,8 @@ public class UI {
         } catch (NumberFormatException e) {throw new UIParseException(args[0], "customer number", "number");}
         
         Date date;
-        try {date = Formatter.date(Integer.parseInt(args[1]));
-        } catch (Exception e) {throw new UIParseException(args[1], "date", "date");}
+        try {date = Formatter.date(args[1]);
+        } catch (ParseException e) {throw new UIParseException(args[1], "date", "date");}
         
         int amount;
         try {amount = Integer.parseInt(args[2]);
@@ -227,8 +228,8 @@ public class UI {
         } catch (NumberFormatException e) {throw new UIParseException(args[0], "order number", "number");}
         
         Date date;
-        try {date = Formatter.date(Integer.parseInt(args[1]));
-        } catch (Exception e) {throw new UIParseException(args[1], "date", "date");}
+        try {date = Formatter.date(args[1]);
+        } catch (ParseException e) {throw new UIParseException(args[1], "date", "date");}
         
         try {
             bikeShop.markComplete(orderNumber, date);

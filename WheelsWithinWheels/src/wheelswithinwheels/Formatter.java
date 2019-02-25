@@ -1,16 +1,17 @@
 package wheelswithinwheels;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Formatter {
-    public static Date date (int input) {
-        int year = input % 10000;
-        int day = (input / 10000) % 100;
-        int month = (input / 1000000) % 100;
-        return new Date(year - 1900, month - 1, day);
+    public static Date date (String input) throws ParseException {
+        return format.parse(input);
     }
     
-    public static int date (Date input) {
-        return 1000000 * (input.getMonth() + 1) + 10000 * input.getDate() + input.getYear() + 1900;
+    public static String date (Date input) {
+        return format.format(input);
     }
+    
+    protected static SimpleDateFormat format = new SimpleDateFormat("MMddYYYY");
 }

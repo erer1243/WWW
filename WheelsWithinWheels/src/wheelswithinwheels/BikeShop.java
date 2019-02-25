@@ -139,14 +139,14 @@ public class BikeShop {
             output += "addc "  +  customer.firstName + " " +  customer.lastName + "\n";
             
             for (Payment payment : customer.payments) {
-                output += "addp " + customer.number + " " + payment.date + " " + payment.amount + "\n";
+                output += "addp " + customer.number + " " + Formatter.date(payment.date) + " " + payment.amount + "\n";
             }
         }
         
         for (int index : orders.keySet()) {
             Order order = orders.get(index);
             output += "rnon " + index + "\n";
-            output += "addo " + order.customer + " " + order.startDate + " " + order.brand + " " + order.tier + " " + order.comment + "\n";
+            output += "addo " + order.customer + " " + Formatter.date(order.startDate) + " " + order.brand + " " + order.tier + " " + order.comment + "\n";
             
             if (order.completedDate != null) {
                 output += "comp " + order.number + " " + Formatter.date(order.completedDate) + "\n";

@@ -132,7 +132,7 @@ public class UI {
         }
         if (e instanceof NullPriceException) {
             NullPriceException npe = (NullPriceException) e;
-            System.out.println("Invalid price brand: " + npe.getBrand() + ", tier: " + npe.getTier());
+            System.out.println("No price for brand: " + npe.getBrand() + ", tier: " + npe.getTier());
         }
     }
     

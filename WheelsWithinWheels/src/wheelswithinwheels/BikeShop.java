@@ -73,8 +73,14 @@ public class BikeShop {
     
     public void addOrder (int customerNumber, Date date, String brand, String tier, String comment) throws NullCustomerException, NullPriceException {
         Customer customer = getCustomer(customerNumber);
+        if (customer == null) {
+            throw new NullCustomerException(customerNumber);
+        }
         
         RepairPrice row = priceTable.getPrice(brand, tier);
+        if (row == null) {
+            throw new NullPriceException(brand, tier);
+        }
         
         int orderNumber = orderCounter++;
 
@@ -94,13 +100,22 @@ public class BikeShop {
     
     public void addPayment (int customerNumber, Date date, int amount) throws NullCustomerException {
         Customer customer = getCustomer(customerNumber);
+        if (customer == null) {
+            throw new NullCustomerException(customerNumber);
+        }
+        
         customer.payments.add(new Payment(date, amount));
     }
     
     //EDITS=====================================================================
     
     public void markComplete(int orderNumber, Date date) throws NullOrderException {
-        getOrder(orderNumber).completedDate = date;
+        Order order = getOrder(orderNumber);
+        if (order == null) {
+            throw new NullOrderException(orderNumber);
+        }
+        
+        order.completedDate = date;
     }
     
     //FILE INTERACTIONS=========================================================

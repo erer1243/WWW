@@ -77,11 +77,11 @@ public class UI {
                     break;
 
                 case "printrp":
-                    printRepairPrices();
+                    printRepairPrices(args);
                     break;
 
                 case "printo":
-                    printOrders();
+                    printOrders(args);
                     break;
 
                 case "":
@@ -142,11 +142,11 @@ public class UI {
     
     //COMMANDS==================================================================
 
-    public void help() {
+    public void help () {
         System.out.println(helpMessage);
     }
     
-    public void addRepairPrice(String[] args) throws UIParseException {
+    public void addRepairPrice (String[] args) throws UIParseException {
         int price;
         int days;
         
@@ -165,7 +165,7 @@ public class UI {
         
     }
     
-    public void addOrder(String[] args) throws UIParseException {
+    public void addOrder (String[] args) throws UIParseException {
         int customerNumber;
         try {customerNumber = Integer.parseInt(args[0]);
         } catch (NumberFormatException e) {throw new UIParseException(args[0], "customer number", "number");}
@@ -181,7 +181,7 @@ public class UI {
         }
     }
     
-    public void addPayment(String[] args) throws UIParseException {
+    public void addPayment (String[] args) throws UIParseException {
         int customerNumber;
         try {customerNumber = Integer.parseInt(args[0]);
         } catch (NumberFormatException e) {throw new UIParseException(args[0], "customer number", "number");}
@@ -201,7 +201,7 @@ public class UI {
         }
     }
     
-    public void markComplete(String[] args) throws UIParseException {
+    public void markComplete (String[] args) throws UIParseException {
         int orderNumber;
         try {orderNumber = Integer.parseInt(args[0]);
         } catch (NumberFormatException e) {throw new UIParseException(args[2], "order number", "number");}
@@ -217,13 +217,17 @@ public class UI {
         }
     }
     
-    public void printRepairPrices() {
+    public void printRepairPrices (String[] args) {
         for (RepairPrice row : bikeShop.getRepairPrices()) {
             System.out.println(row);
         }
     }
     
-    public void printOrders() {
+    public void printCustomersByName (String[] args) {}
+    
+    public void printCustomersByNumber (String[] args) {}
+    
+    public void printOrders (String[] args) {
         String orderString = "";
         for (Pair<Order, Customer> pair : bikeShop.getOrders()) {
             Order order = pair.getKey();
@@ -241,6 +245,14 @@ public class UI {
         System.out.println(orderString);
     }
     
+    public void printPayments (String[] args) {}
+    
+    public void printTransactions (String[] args) {}
+    
+    public void printReceivables (String[] args) {}
+    
+    public void printStatements (String[] args) {}
+    
     public void readScript (String[] args) throws FileNotFoundException, IOException {
         BufferedReader br = new BufferedReader (new FileReader(args[0]));
         String line = null;
@@ -248,7 +260,7 @@ public class UI {
             parseLine(line);
         }
     }
-    
+     
     public void saveState (String[] args) throws FileNotFoundException, UnsupportedEncodingException, IOException {
         Writer bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(args[0]), "utf-8"));
         bw.write(bikeShop.saveState());

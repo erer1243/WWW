@@ -1,7 +1,6 @@
 package wheelswithinwheels;
 
-class NullCustomerException extends Exception {
-    
+class NullCustomerException extends BikeShopException {
     protected int customerNumber;
     
     public NullCustomerException (int customerNumber) {

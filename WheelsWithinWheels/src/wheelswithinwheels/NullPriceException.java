@@ -1,6 +1,6 @@
 package wheelswithinwheels;
 
-class NullPriceException extends Exception {
+class NullPriceException extends BikeShopException {
     protected String brand;
     protected String tier;
     

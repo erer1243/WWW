@@ -34,60 +34,64 @@ public class UI {
         String[] commandParts = splitStringIntoParts(line),
                  args = Arrays.copyOfRange(commandParts, 1, commandParts.length);
         
-        switch (commandParts[0]) {
-            case "help":
-                help();
-                break;
-                
-            case "quit":
-                System.out.println("Goodbye");
-                return false;
-                
-            case "addrp":
-                addRepairPrice(args);
-                break;
-                
-            case "addc":
-                addCustomer(args);
-                break;
-                
-            case "addo":
-                addOrder(args);
-                break;    
-            
-            case "addp":
-                addPayment(args);
-                break;
-                
-            case "comp":
-                markComplete(args);
-                break;
-            
-            case "readc":
-                readScript(args);
-                break;    
-                
-            case "savebs":
-                saveState(args);
-                break;  
-                
-            case "restorebs":
-                restoreState(args);
-                break;
-                
-            case "printrp":
-                printRepairPrices();
-                break;
-                
-            case "printo":
-                printOrders();
-                break;
-                
-            case "":
-                break;
-            
-            default:
-                System.out.println("Unknown command " + commandParts[0]);
+        try{
+            switch (commandParts[0]) {
+                case "help":
+                    help();
+                    break;
+
+                case "quit":
+                    System.out.println("Goodbye");
+                    return false;
+
+                case "addrp":
+                    addRepairPrice(args);
+                    break;
+
+                case "addc":
+                    addCustomer(args);
+                    break;
+
+                case "addo":
+                    addOrder(args);
+                    break;    
+
+                case "addp":
+                    addPayment(args);
+                    break;
+
+                case "comp":
+                    markComplete(args);
+                    break;
+
+                case "readc":
+                    readScript(args);
+                    break;    
+
+                case "savebs":
+                    saveState(args);
+                    break;  
+
+                case "restorebs":
+                    restoreState(args);
+                    break;
+
+                case "printrp":
+                    printRepairPrices();
+                    break;
+
+                case "printo":
+                    printOrders();
+                    break;
+
+                case "":
+                    break;
+
+                default:
+                    System.out.println("Unknown command " + commandParts[0]);
+            }
+        } catch (UIParseException e) {
+               handleUIException(e);
         }
         
         return true;
@@ -97,6 +101,8 @@ public class UI {
         // Running breaks when parseLine returns false
         while (parseLine(getInputLine()));
     }
+    
+    //HELPER METHODS============================================================
     
     protected String getInputLine() throws IOException {
         System.out.print("> ");
@@ -109,64 +115,106 @@ public class UI {
     protected String[] splitStringIntoParts(String input) {
         return input.split("\\s+");
     }
-   
-    
     
     protected void reset() {
         bikeShop = new BikeShop();
-        
         System.out.println("Data records reset");
     }
     
-    // Command functions
+    protected void handleBikeShopExeption (BikeShopException e) {
+        if (e instanceof NullCustomerException) {
+            NullCustomerException nce = (NullCustomerException) e;
+            System.out.println("Invalid customer number: " + nce.getCustomerNumber());
+        }
+        if (e instanceof NullOrderException) {
+            NullOrderException noe = (NullOrderException) e;
+            System.out.println("Invalid order number: " + noe.getOrderNumber());
+        }
+        if (e instanceof NullPriceException) {
+            NullPriceException npe = (NullPriceException) e;
+            System.out.println("Invalid price brand: " + npe.getBrand() + ", tier: " + npe.getTier());
+        }
+    }
+    
+    protected void handleUIException (UIParseException e) {
+        System.out.println("Invalid " + e.getArgument() + ": \"" + e.getInputted() + "\" is not a valid " + e.getExpectedType());
+    }
+    
+    //COMMANDS==================================================================
+
     public void help() {
         System.out.println(helpMessage);
     }
     
-    public void addRepairPrice(String[] args) {
-        //assuming no user error for now
-        int price = Integer.parseInt(args[2]);
-        int days = Integer.parseInt(args[3]);
+    public void addRepairPrice(String[] args) throws UIParseException {
+        int price;
+        int days;
+        
+        try {price = Integer.parseInt(args[2]);
+        } catch (NumberFormatException e) {throw new UIParseException(args[2], "price", "number");}
+        
+        try {days = Integer.parseInt(args[3]);
+        } catch (NumberFormatException e) {throw new UIParseException(args[2], "number of days", "number");}
         
         bikeShop.addRepairPrice(args[0], args[1], price, days);
     }
     
     public void addCustomer(String[] args) {
-        //assuming no user error
+        
         bikeShop.addCustomer(args[0], args[1]);
         
     }
     
-    public void addOrder(String[] args) {
-        //assuming no user error
-        int customerNumber = Integer.parseInt(args[0]);
-        Date date = Formatter.date(Integer.parseInt(args[1]));
+    public void addOrder(String[] args) throws UIParseException {
+        int customerNumber;
+        try {customerNumber = Integer.parseInt(args[0]);
+        } catch (NumberFormatException e) {throw new UIParseException(args[0], "customer number", "number");}
+        
+        Date date;
+        try {date = Formatter.date(Integer.parseInt(args[1]));
+        } catch (Exception e) {throw new UIParseException(args[1], "date", "date");}
         
         try {
             bikeShop.addOrder(customerNumber, date, args[2], args[3], "");
-        } catch (NullPointerException e) {
-           System.out.println(e.getMessage());
+        } catch (BikeShopException e) {
+            handleBikeShopExeption(e);
         }
     }
     
-    public void addPayment(String[] args) {
-        int customerNumber = Integer.parseInt(args[0]);
-        Date date = Formatter.date(Integer.parseInt(args[1]));
-        int amount = Integer.parseInt(args[2]);
+    public void addPayment(String[] args) throws UIParseException {
+        int customerNumber;
+        try {customerNumber = Integer.parseInt(args[0]);
+        } catch (NumberFormatException e) {throw new UIParseException(args[0], "customer number", "number");}
+        
+        Date date;
+        try {date = Formatter.date(Integer.parseInt(args[1]));
+        } catch (Exception e) {throw new UIParseException(args[2], "date", "date");}
+        
+        int amount;
+        try {amount = Integer.parseInt(args[2]);
+        } catch (NumberFormatException e) {throw new UIParseException(args[2], "amount", "number");}
         
         try {
             bikeShop.addPayment(customerNumber, date, amount);
-        } catch (NullPointerException e) {
-            System.out.println(e.getMessage());
+        } catch (BikeShopException e) {
+            handleBikeShopExeption(e);
         }
     }
     
-    public void markComplete(String[] args) {
-        //assuming no user error
-        int orderNumber = Integer.parseInt(args[0]);
-        Date date = Formatter.date(Integer.parseInt(args[1]));
+    public void markComplete(String[] args) throws UIParseException {
+        int orderNumber;
+        try {orderNumber = Integer.parseInt(args[0]);
+        } catch (NumberFormatException e) {throw new UIParseException(args[2], "order number", "number");}
         
-        bikeShop.markComplete(orderNumber, date);
+        Date date;
+        try {date = Formatter.date(Integer.parseInt(args[1]));
+        } catch (Exception e) {throw new UIParseException(args[2], "date", "date");}
+        
+        try {
+            bikeShop.markComplete(orderNumber, date);
+        } catch (BikeShopException e) {
+            handleBikeShopExeption(e);
+        }
     }
     
     public void printRepairPrices() {

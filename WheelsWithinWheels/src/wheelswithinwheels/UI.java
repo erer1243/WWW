@@ -284,21 +284,21 @@ public class UI {
         restoring = false;
     }
     
-    public void removeCustomer (String[] args) throws UIParseException {
-        
+    protected void removeCustomer (String[] args) throws UIParseException {
+        int customerNumber = Formatter.integer(args[0], "customer number");
     }
     
-    public void removeOrder (String[] args) throws UIParseException {
-        
+    protected void removeOrder (String[] args) throws UIParseException {
+        int orderNumber = Formatter.integer(args[0], "order number");
     }
     
-    public void updateOrderCounter (String[] args) throws UIParseException {
+    protected void updateOrderCounter (String[] args) throws UIParseException {
         int orderCounter = Formatter.integer(args[0], "order counter");
         
         bikeShop.updateOrderCounter(orderCounter);
     }
     
-    public void updateCustomerCounter (String[] args) throws UIParseException {
+    protected void updateCustomerCounter (String[] args) throws UIParseException {
         int customerCounter = Formatter.integer(args[0], "customer counter");
         
         bikeShop.updateCustomerCounter(customerCounter);

@@ -7,6 +7,8 @@ import javafx.util.Pair;
 import java.lang.Exception;
 
 public class BikeShop {
+    //Note: use customers.get or orders.get if you know it will work.  If unsure, always use getCustomer or getOrder.
+    
     protected PriceTable priceTable = new PriceTable();
     
     protected HashMap<Integer, Order> orders = new HashMap<>();
@@ -47,7 +49,7 @@ public class BikeShop {
     
     //GET MULTIPLE==============================================================
     
-    public ArrayList<Pair<Order, Customer>> getOrders() {
+    public ArrayList<Pair<Order, Customer>> getOrders () {
         ArrayList<Pair<Order, Customer>> output = new ArrayList<>();
         for (Order order : orders.values()) {
             output.add(new Pair<Order, Customer> (order, customers.get(order.customer)));
@@ -62,7 +64,7 @@ public class BikeShop {
     //ADDS======================================================================
     
     
-    public void addRepairPrice(String brand, String tier, int price, int days) {
+    public void addRepairPrice (String brand, String tier, int price, int days) {
         priceTable.addPrice(brand, tier, price, days);
     }
     
@@ -112,13 +114,30 @@ public class BikeShop {
     
     //EDITS=====================================================================
     
-    public void markComplete(int orderNumber, Date date) throws NullOrderException {
+    public void markComplete (int orderNumber, Date date) throws NullOrderException {
         Order order = getOrder(orderNumber);
         if (order == null) {
             throw new NullOrderException(orderNumber);
         }
         
         order.completedDate = date;
+    }
+    
+    //REMOVES===================================================================
+    
+    public void removeCustomer (int customerNumber) throws NullCustomerException {
+        Customer customer = getCustomer(customerNumber);
+        for (int orderNumber : customer.orderNumbers) {
+            orders.remove(orderNumber);
+        }
+        customers.remove(customerNumber);
+    }
+    
+    public void removeOrder (int orderNumber) throws NullOrderException {
+        Order order = getOrder(orderNumber);
+        Customer customer = customers.get(order.customer);
+        customer.orderNumbers.remove(orderNumber);
+        orders.remove(orderNumber);
     }
     
     //FILE INTERACTIONS=========================================================

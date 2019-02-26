@@ -7,7 +7,8 @@ import javafx.util.Pair;
 import java.lang.Exception;
 
 public class BikeShop {
-    //Note: use customers.get or orders.get if you know it will work.  If unsure, always use getCustomer or getOrder.
+    //Note: use customers.get or orders.get if you know it will work.
+    //If unsure, always use getCustomer or getOrder.
     
     protected PriceTable priceTable = new PriceTable();
     
@@ -20,7 +21,15 @@ public class BikeShop {
     public void updateOrderCounter (int newValue) {orderCounter = newValue;}
     public void updateCustomerCounter (int newValue) {customerCounter = newValue;}
     
+    protected boolean backwardsCompatability = true;
     
+    public boolean isBackwardsCompatable () {
+        return backwardsCompatability;
+    }
+    
+    public void allowExtraFunctions () {
+        backwardsCompatability = false;
+    }
     //GETS======================================================================
     
     public RepairPrice getRepairPrice (String brand, String tier) throws NullPriceException {
@@ -64,13 +73,15 @@ public class BikeShop {
     //ADDS======================================================================
     
     
-    public void addRepairPrice (String brand, String tier, int price, int days) {
+    public void addRepairPrice (String brand, String tier, int price, int days) throws NullPriceException {
         priceTable.addPrice(brand, tier, price, days);
     }
     
     public void addCustomer(String firstName, String lastName) {
-        customers.put(customerCounter++, new Customer(
-                customers.size(),
+        int customerNumber = customerCounter++;
+        
+        customers.put(customerNumber, new Customer(
+                customerNumber,
                 firstName,
                 lastName
         ));
@@ -152,9 +163,8 @@ public class BikeShop {
             output += "addrp " + " " +  row.brand + " " +  row.tier + " " +  row.price + " " +  row.days + "\n";
         }
         
-        for (int index : customers.keySet()) {
-            Customer customer = customers.get(index);
-            output += "rncn " + index + "\n";
+        for (Customer customer : customers.values()) {
+            output += "rncn " + customer.number + "\n";
             output += "addc "  +  customer.firstName + " " +  customer.lastName + "\n";
             
             for (Payment payment : customer.payments) {
@@ -162,9 +172,8 @@ public class BikeShop {
             }
         }
         
-        for (int index : orders.keySet()) {
-            Order order = orders.get(index);
-            output += "rnon " + index + "\n";
+        for (Order order : orders.values()) {
+            output += "rnon " + order.number + "\n";
             output += "addo " + order.customer + " " + Formatter.date(order.startDate) + " " + order.brand + " " + order.tier + " " + order.comment + "\n";
             
             if (order.completedDate != null) {

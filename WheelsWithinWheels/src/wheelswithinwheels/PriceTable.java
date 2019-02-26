@@ -13,10 +13,10 @@ public class PriceTable {
         return null;
     }
     
-    public void addPrice(String brand, String tier, int price, int days) {
+    public void addPrice(String brand, String tier, int price, int days) throws NullPriceException {
         RepairPrice currentPrice = getPrice(brand, tier);
         if (currentPrice != null) {
-            return;
+            throw new NullPriceException(brand, tier);
         } else 
             priceList.add(new RepairPrice(brand, tier, price, days));
     }

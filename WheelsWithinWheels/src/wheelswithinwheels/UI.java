@@ -185,7 +185,11 @@ public class UI {
         int price = Formatter.integer(args[2], "price");
         int days = Formatter.integer(args[3], "number of days");
         
-        bikeShop.addRepairPrice(args[0], args[1], price, days);
+        try {
+            bikeShop.addRepairPrice(args[0], args[1], price, days);
+        } catch (NullPriceException e) {
+            System.out.println("Price already exists for brand: " + e.getBrand() + ", tier: " + e.getTier());
+        }
     }
     
     protected void addCustomer(String[] args) {

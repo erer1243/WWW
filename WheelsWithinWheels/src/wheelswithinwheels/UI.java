@@ -2,6 +2,7 @@ package wheelswithinwheels;
 
 import java.io.*;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import javafx.util.Pair;
@@ -83,6 +84,10 @@ public class UI {
                     printTransactions(args);
                     break;
                 
+                case "printr":
+                    printReceivables(args);
+                    break;
+                    
                 case "prints":
                     printStatements(args);
                     break;
@@ -245,14 +250,52 @@ public class UI {
                     /*+ order.completedDate */
                     + "\n";
         }
+        if (orderString.equals("")) {
+            orderString = "No orders have been made yet";
+        }
         System.out.println(orderString);
     }
     
-    protected void printPayments (String[] args) {} //TODO
+    protected void printPayments (String[] args) {
+        String output = "";
+        for (Customer c : bikeShop.getCustomers()) {
+            output += c.firstName + " " + c.lastName + ":\n";
+            
+            ArrayList<Payment> payments = c.payments;
+            for (Payment p : payments) {
+                output += p.toString() + "\n";
+            }
+        }
+        if (output.equals("")) {
+            output = "No payments have been made yet";
+        }
+        System.out.println(output);
+    }
     
     protected void printTransactions (String[] args) {} //TODO
     
-    protected void printReceivables (String[] args) {} //TODO
+    protected void printReceivables (String[] args) {
+        String output = "";
+        int totalOwed = 0;
+        for (Customer c : bikeShop.getCustomers()) {
+            output += c.firstName + " " + c.lastName + " owes: ";
+            int cPrice = 0;
+            for (Pair<Order, Customer> pair : bikeShop.getOrders()) {
+                Order order = pair.getKey();
+                Customer customer = pair.getValue();
+                
+                if (customer == c) {
+                    cPrice += order.price;
+                }
+            }
+            int amountDue = c.balance() - cPrice;
+            totalOwed += amountDue;
+            //Assumed that balance is never greater than totalPrice ie. totalDue is never negative
+            output += "$" + amountDue + "\n";
+        }
+        output += "\tTotal Accounts Receivable: $" + totalOwed;
+        System.out.println(output);
+    }
     
     protected void printStatements (String[] args) {} //TODO
     

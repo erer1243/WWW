@@ -70,6 +70,14 @@ public class BikeShop {
         return priceTable.getAll();
     }
     
+    public ArrayList<Customer> getCustomers() {
+        ArrayList<Customer> output = new ArrayList<>();
+        for (Customer c : customers.values()) {
+            output.add(c);
+        }
+        return output;
+    }
+    
     //ADDS======================================================================
     
     

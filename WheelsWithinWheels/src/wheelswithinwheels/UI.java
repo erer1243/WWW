@@ -1,7 +1,6 @@
 package wheelswithinwheels;
 
 import java.io.*;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -168,6 +167,26 @@ public class UI {
         System.out.println("Invalid " + e.getArgument() + ": \"" + e.getInputted() + "\" is not a valid " + e.getExpectedType());
     }
     
+    protected void readScript(String[] args) throws IOException, UIParseException {
+        File file = new File(args[0]);
+        
+        FileReader fileReader = new FileReader(file);
+        BufferedReader reader = new BufferedReader(fileReader);
+                
+        String line;
+        while ((line = reader.readLine()) != null) {
+            String[] commandParts = splitStringIntoParts(line);
+            String command = commandParts[0];
+            
+            if (command.equals("rnon"))
+                updateOrderCounter(Arrays.copyOfRange(commandParts, 1, commandParts.length));
+            else if (command.equals("rncn"))
+                updateCustomerCounter(Arrays.copyOfRange(commandParts, 1, commandParts.length));
+            else
+                parseLine(line);
+        }
+    }
+    
     //COMMANDS==================================================================
 
     protected void help() {
@@ -286,26 +305,6 @@ public class UI {
     }
     
     protected void printStatements(String[] args) {} //TODO
-    
-    protected void readScript(String[] args) throws IOException, UIParseException {
-        File file = new File(args[0]);
-        
-        FileReader fileReader = new FileReader(file);
-        BufferedReader reader = new BufferedReader(fileReader);
-                
-        String line;
-        while ((line = reader.readLine()) != null) {
-            String[] commandParts = splitStringIntoParts(line);
-            String command = commandParts[0];
-            
-            if (command.equals("rnon"))
-                updateOrderCounter(Arrays.copyOfRange(commandParts, 1, commandParts.length));
-            else if (command.equals("rncn"))
-                updateCustomerCounter(Arrays.copyOfRange(commandParts, 1, commandParts.length));
-            else
-                parseLine(line);
-        }
-    }
      
     protected void saveBikeShop(String[] args) throws IOException {
         File file = new File(args[0]);

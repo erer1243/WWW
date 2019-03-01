@@ -201,8 +201,9 @@ public class UI {
     protected void addOrder (String[] args) throws UIParseException, BikeShopException {
         int customerNumber = Formatter.integer(args[0], "customer number");
         Date date = Formatter.date(args[1]);
+        String comment = String.join(" ", Arrays.copyOfRange(args, 4, args.length));
         
-        bikeShop.addOrder(customerNumber, date, args[2], args[3], "");
+        bikeShop.addOrder(customerNumber, date, args[2], args[3], comment);
     }
     
     protected void addPayment (String[] args) throws UIParseException, BikeShopException {
@@ -241,6 +242,7 @@ public class UI {
                     + order.brand + "\t" 
                     + order.tier + "\t" 
                     + order.price + "\t" 
+                    + order.comment + "\t"
                     /*+ order.promiseDate + "\t"*/ 
                     /*+ order.completedDate */
                     + "\n";

@@ -205,9 +205,8 @@ public class UI {
     }
     
     protected void addCustomer(String[] args) {
-        
-        bikeShop.addCustomer(args[0], args[1]);
-        
+        int customerNumber = bikeShop.addCustomer(args[0], args[1]);
+        System.out.println("Customer " + args[0] + " " + args[1] + " given number: " + customerNumber);
     }
     
     protected void addOrder(String[] args) throws UIParseException, BikeShopException {

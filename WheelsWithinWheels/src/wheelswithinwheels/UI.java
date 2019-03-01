@@ -90,7 +90,7 @@ public class UI {
                     break;
                 
                 case "readc":
-                    readScript(args);
+                    readScript(args, false);
                     break;
                     
                 case "savebs":
@@ -167,24 +167,30 @@ public class UI {
         System.out.println("Invalid " + e.getArgument() + ": \"" + e.getInputted() + "\" is not a valid " + e.getExpectedType());
     }
     
-    protected void readScript(String[] args) throws IOException, UIParseException {
+    protected void readScript(String[] args, boolean isRestoring) throws IOException, UIParseException {
         File file = new File(args[0]);
         
         FileReader fileReader = new FileReader(file);
         BufferedReader reader = new BufferedReader(fileReader);
                 
         String line;
-        while ((line = reader.readLine()) != null) {
-            String[] commandParts = splitStringIntoParts(line);
-            String command = commandParts[0];
-            
-            if (command.equals("rnon"))
-                updateOrderCounter(Arrays.copyOfRange(commandParts, 1, commandParts.length));
-            else if (command.equals("rncn"))
-                updateCustomerCounter(Arrays.copyOfRange(commandParts, 1, commandParts.length));
-            else
-                parseLine(line);
+        
+        if (isRestoring) {
+            while ((line = reader.readLine()) != null) {
+                String[] commandParts = splitStringIntoParts(line);
+                String command = commandParts[0];
+
+                if (command.equals("rnon"))
+                    updateOrderCounter(Arrays.copyOfRange(commandParts, 1, commandParts.length));
+                else if (command.equals("rncn"))
+                    updateCustomerCounter(Arrays.copyOfRange(commandParts, 1, commandParts.length));
+                else
+                    parseLine(line);
+            }
         }
+        else
+            while ((line = reader.readLine()) != null)
+                parseLine(line);
     }
     
     //COMMANDS==================================================================
@@ -237,7 +243,10 @@ public class UI {
         }
     }
     
-    protected void printCustomersByName(String[] args) {} //TODO
+    protected void printCustomersByName(String[] args) {
+        ArrayList<Customer> customers = bikeShop.getCustomers();
+        
+    } // TODO
     
     protected void printCustomersByNumber(String[] args) {} //TODO
     
@@ -318,7 +327,7 @@ public class UI {
     
     protected void restoreBikeShop(String[] args) throws IOException, UIParseException {
         reset();
-        readScript(args);
+        readScript(args, true);
     }
     
     protected void removeCustomer(String[] args) throws UIParseException {

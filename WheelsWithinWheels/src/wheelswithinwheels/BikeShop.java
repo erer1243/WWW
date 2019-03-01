@@ -1,10 +1,8 @@
 package wheelswithinwheels;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Date;
 import javafx.util.Pair;
-import java.lang.Exception;
 
 public class BikeShop {
     //Note: use customers.get or orders.get if you know it will work.
@@ -72,9 +70,9 @@ public class BikeShop {
     
     public ArrayList<Customer> getCustomers() {
         ArrayList<Customer> output = new ArrayList<>();
-        for (Customer c : customers.values()) {
+        for (Customer c : customers.values())
             output.add(c);
-        }
+        
         return output;
     }
     

@@ -29,8 +29,6 @@ public class UI {
         + "savebs <filename> - save bike shop as a file of commands in file filename\n"
         + "restorebs <filename> - restore a previously saved bike shop file from file filename";
     
-    boolean restoring = false;
-    
     protected BikeShop bikeShop = new BikeShop();
     
     // Returns true if the program should continue, false on quit
@@ -38,7 +36,7 @@ public class UI {
         String[] commandParts = splitStringIntoParts(line),
                  args = Arrays.copyOfRange(commandParts, 1, commandParts.length);
         
-        try{
+        try {
             switch (commandParts[0]) {
                 case "quit":
                     System.out.println("Goodbye");
@@ -110,20 +108,6 @@ public class UI {
                     
                 case "remo":
                     removeOrder(args);
-                    break;
-
-                case "rnon":
-                    if (restoring) 
-                        updateOrderCounter(args);
-                    else 
-                        System.out.println("Unknown command " + commandParts[0]);
-                    break;
-                
-                case "rncn":
-                    if (restoring)
-                        updateCustomerCounter(args);
-                    else 
-                        System.out.println("Unknown command " + commandParts[0]);
                     break;
 
                 case "":
@@ -303,16 +287,23 @@ public class UI {
     
     protected void printStatements(String[] args) {} //TODO
     
-    protected void readScript(String[] args) throws IOException {
+    protected void readScript(String[] args) throws IOException, UIParseException {
         File file = new File(args[0]);
         
         FileReader fileReader = new FileReader(file);
-        
         BufferedReader reader = new BufferedReader(fileReader);
                 
-        String line = null;
+        String line;
         while ((line = reader.readLine()) != null) {
-            parseLine(line);
+            String[] commandParts = splitStringIntoParts(line);
+            String command = commandParts[0];
+            
+            if (command.equals("rnon"))
+                updateOrderCounter(Arrays.copyOfRange(commandParts, 1, commandParts.length));
+            else if (command.equals("rncn"))
+                updateCustomerCounter(Arrays.copyOfRange(commandParts, 1, commandParts.length));
+            else
+                parseLine(line);
         }
     }
      
@@ -321,18 +312,15 @@ public class UI {
         file.createNewFile();
         
         FileWriter fileWriter = new FileWriter(file);
-        
         BufferedWriter writer = new BufferedWriter(fileWriter);
         
         writer.write(bikeShop.saveState());
         writer.close();
     }
     
-    protected void restoreBikeShop(String[] args) throws IOException {
+    protected void restoreBikeShop(String[] args) throws IOException, UIParseException {
         reset();
-        restoring = true;
         readScript(args);
-        restoring = false;
     }
     
     protected void removeCustomer(String[] args) throws UIParseException {

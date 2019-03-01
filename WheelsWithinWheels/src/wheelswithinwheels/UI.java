@@ -97,11 +97,11 @@ public class UI {
                     break;
                     
                 case "savebs":
-                    saveState(args);
+                    saveBikeShop(args);
                     break;  
 
                 case "restorebs":
-                    restoreState(args);
+                    restoreBikeShop(args);
                     break;
                 
                 case "remc":
@@ -113,13 +113,17 @@ public class UI {
                     break;
 
                 case "rnon":
-                    if (restoring) {updateOrderCounter(args);
-                    } else {System.out.println("Unknown command " + commandParts[0]);}
+                    if (restoring) 
+                        updateOrderCounter(args);
+                    else 
+                        System.out.println("Unknown command " + commandParts[0]);
                     break;
                 
                 case "rncn":
-                    if (restoring) {updateCustomerCounter(args);
-                    } else {System.out.println("Unknown command " + commandParts[0]);}
+                    if (restoring)
+                        updateCustomerCounter(args);
+                    else 
+                        System.out.println("Unknown command " + commandParts[0]);
                     break;
 
                 case "":
@@ -161,7 +165,7 @@ public class UI {
         System.out.println("Data records reset");
     }
     
-    protected void handleBikeShopException (BikeShopException e) {
+    protected void handleBikeShopException(BikeShopException e) {
         if (e instanceof NullCustomerException) {
             NullCustomerException nce = (NullCustomerException) e;
             System.out.println("Invalid customer number: " + nce.getCustomerNumber());
@@ -176,17 +180,17 @@ public class UI {
         }
     }
     
-    protected void handleUIParseException (UIParseException e) {
+    protected void handleUIParseException(UIParseException e) {
         System.out.println("Invalid " + e.getArgument() + ": \"" + e.getInputted() + "\" is not a valid " + e.getExpectedType());
     }
     
     //COMMANDS==================================================================
 
-    protected void help () {
+    protected void help() {
         System.out.println(helpMessage);
     }
     
-    protected void addRepairPrice (String[] args) throws UIParseException {
+    protected void addRepairPrice(String[] args) throws UIParseException {
         int price = Formatter.integer(args[2], "price");
         int days = Formatter.integer(args[3], "number of days");
         
@@ -203,14 +207,14 @@ public class UI {
         
     }
     
-    protected void addOrder (String[] args) throws UIParseException, BikeShopException {
+    protected void addOrder(String[] args) throws UIParseException, BikeShopException {
         int customerNumber = Formatter.integer(args[0], "customer number");
         Date date = Formatter.date(args[1]);
         
         bikeShop.addOrder(customerNumber, date, args[2], args[3], "");
     }
     
-    protected void addPayment (String[] args) throws UIParseException, BikeShopException {
+    protected void addPayment(String[] args) throws UIParseException, BikeShopException {
         int customerNumber = Formatter.integer(args[0], "customer number");
         Date date = Formatter.date(args[1]);
         int amount = Formatter.integer(args[2], "amount");
@@ -218,24 +222,24 @@ public class UI {
         bikeShop.addPayment(customerNumber, date, amount);
     }
     
-    protected void markComplete (String[] args) throws UIParseException, BikeShopException {
+    protected void markComplete(String[] args) throws UIParseException, BikeShopException {
         int orderNumber = Formatter.integer(args[0], "order number");
         Date date = Formatter.date(args[1]);
         
         bikeShop.markComplete(orderNumber, date);
     }
     
-    protected void printRepairPrices (String[] args) {
+    protected void printRepairPrices(String[] args) {
         for (RepairPrice row : bikeShop.getRepairPrices()) {
             System.out.println(row);
         }
     }
     
-    protected void printCustomersByName (String[] args) {} //TODO
+    protected void printCustomersByName(String[] args) {} //TODO
     
-    protected void printCustomersByNumber (String[] args) {} //TODO
+    protected void printCustomersByNumber(String[] args) {} //TODO
     
-    protected void printOrders (String[] args) {
+    protected void printOrders(String[] args) {
         String orderString = "";
         for (Pair<Order, Customer> pair : bikeShop.getOrders()) {
             Order order = pair.getKey();
@@ -256,7 +260,7 @@ public class UI {
         System.out.println(orderString);
     }
     
-    protected void printPayments (String[] args) {
+    protected void printPayments(String[] args) {
         String output = "";
         for (Customer c : bikeShop.getCustomers()) {
             output += c.firstName + " " + c.lastName + ":\n";
@@ -272,9 +276,9 @@ public class UI {
         System.out.println(output);
     }
     
-    protected void printTransactions (String[] args) {} //TODO
+    protected void printTransactions(String[] args) {} //TODO
     
-    protected void printReceivables (String[] args) {
+    protected void printReceivables(String[] args) {
         String output = "";
         int totalOwed = 0;
         for (Customer c : bikeShop.getCustomers()) {
@@ -297,9 +301,9 @@ public class UI {
         System.out.println(output);
     }
     
-    protected void printStatements (String[] args) {} //TODO
+    protected void printStatements(String[] args) {} //TODO
     
-    protected void readScript (String[] args) throws IOException {
+    protected void readScript(String[] args) throws IOException {
         File file = new File(args[0]);
         
         FileReader fileReader = new FileReader(file);
@@ -312,7 +316,7 @@ public class UI {
         }
     }
      
-    protected void saveState (String[] args) throws IOException {
+    protected void saveBikeShop(String[] args) throws IOException {
         File file = new File(args[0]);
         file.createNewFile();
         
@@ -324,28 +328,28 @@ public class UI {
         writer.close();
     }
     
-    protected void restoreState (String[] args) throws IOException {
+    protected void restoreBikeShop(String[] args) throws IOException {
         reset();
         restoring = true;
         readScript(args);
         restoring = false;
     }
     
-    protected void removeCustomer (String[] args) throws UIParseException {
+    protected void removeCustomer(String[] args) throws UIParseException {
         int customerNumber = Formatter.integer(args[0], "customer number");
     }
     
-    protected void removeOrder (String[] args) throws UIParseException {
+    protected void removeOrder(String[] args) throws UIParseException {
         int orderNumber = Formatter.integer(args[0], "order number");
     }
     
-    protected void updateOrderCounter (String[] args) throws UIParseException {
+    protected void updateOrderCounter(String[] args) throws UIParseException {
         int orderCounter = Formatter.integer(args[0], "order counter");
         
         bikeShop.updateOrderCounter(orderCounter);
     }
     
-    protected void updateCustomerCounter (String[] args) throws UIParseException {
+    protected void updateCustomerCounter(String[] args) throws UIParseException {
         int customerCounter = Formatter.integer(args[0], "customer counter");
         
         bikeShop.updateCustomerCounter(customerCounter);

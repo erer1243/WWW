@@ -1,10 +1,8 @@
 package wheelswithinwheels;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Date;
 import javafx.util.Pair;
-import java.lang.Exception;
 
 public class BikeShop {
     //Note: use customers.get or orders.get if you know it will work.
@@ -18,21 +16,21 @@ public class BikeShop {
     protected HashMap<Integer, Customer> customers = new HashMap<>();
     protected int customerCounter = 0;
     
-    public void updateOrderCounter (int newValue) {orderCounter = newValue;}
-    public void updateCustomerCounter (int newValue) {customerCounter = newValue;}
+    public void updateOrderCounter(int newValue) {orderCounter = newValue;}
+    public void updateCustomerCounter(int newValue) {customerCounter = newValue;}
     
     protected boolean backwardsCompatability = true;
     
-    public boolean isBackwardsCompatable () {
+    public boolean isBackwardsCompatable() {
         return backwardsCompatability;
     }
     
-    public void allowExtraFunctions () {
+    public void allowExtraFunctions() {
         backwardsCompatability = false;
     }
     //GETS======================================================================
     
-    public RepairPrice getRepairPrice (String brand, String tier) throws NullPriceException {
+    public RepairPrice getRepairPrice(String brand, String tier) throws NullPriceException {
         RepairPrice row = priceTable.getPrice(brand, tier);
         if (row == null) {
             throw new NullPriceException(brand, tier);
@@ -40,7 +38,7 @@ public class BikeShop {
         return row;
     }
     
-    public Order getOrder (int orderNumber) throws NullOrderException {
+    public Order getOrder(int orderNumber) throws NullOrderException {
         Order order = orders.get(orderNumber);
         if (order == null) {
             throw new NullOrderException(orderNumber);
@@ -48,7 +46,7 @@ public class BikeShop {
         return order;
     }
     
-    public Customer getCustomer (int customerNumber) throws NullCustomerException {
+    public Customer getCustomer(int customerNumber) throws NullCustomerException {
         Customer customer = customers.get(customerNumber);
         if (customer == null) {
             throw new NullCustomerException(customerNumber);
@@ -70,14 +68,22 @@ public class BikeShop {
         return priceTable.getAll();
     }
     
+    public ArrayList<Customer> getCustomers() {
+        ArrayList<Customer> output = new ArrayList<>();
+        for (Customer c : customers.values())
+            output.add(c);
+        
+        return output;
+    }
+    
     //ADDS======================================================================
     
     
-    public void addRepairPrice (String brand, String tier, int price, int days) throws NullPriceException {
+    public void addRepairPrice(String brand, String tier, int price, int days) throws NullPriceException {
         priceTable.addPrice(brand, tier, price, days);
     }
     
-    public void addCustomer(String firstName, String lastName) {
+    public int addCustomer(String firstName, String lastName) {
         int customerNumber = customerCounter++;
         
         customers.put(customerNumber, new Customer(
@@ -85,9 +91,11 @@ public class BikeShop {
                 firstName,
                 lastName
         ));
+        
+        return customerNumber;
     }
     
-    public void addOrder (int customerNumber, Date date, String brand, String tier, String comment) throws NullCustomerException, NullPriceException {
+    public void addOrder(int customerNumber, Date date, String brand, String tier, String comment) throws NullCustomerException, NullPriceException {
         Customer customer = getCustomer(customerNumber);
         if (customer == null) {
             throw new NullCustomerException(customerNumber);
@@ -114,7 +122,7 @@ public class BikeShop {
         ));
     }
     
-    public void addPayment (int customerNumber, Date date, int amount) throws NullCustomerException {
+    public void addPayment(int customerNumber, Date date, int amount) throws NullCustomerException {
         Customer customer = getCustomer(customerNumber);
         if (customer == null) {
             throw new NullCustomerException(customerNumber);
@@ -125,7 +133,7 @@ public class BikeShop {
     
     //EDITS=====================================================================
     
-    public void markComplete (int orderNumber, Date date) throws NullOrderException {
+    public void markComplete(int orderNumber, Date date) throws NullOrderException {
         Order order = getOrder(orderNumber);
         if (order == null) {
             throw new NullOrderException(orderNumber);
@@ -136,7 +144,7 @@ public class BikeShop {
     
     //REMOVES===================================================================
     
-    public void removeCustomer (int customerNumber) throws NullCustomerException {
+    public void removeCustomer(int customerNumber) throws NullCustomerException {
         Customer customer = getCustomer(customerNumber);
         for (int orderNumber : customer.orderNumbers) {
             orders.remove(orderNumber);
@@ -144,7 +152,7 @@ public class BikeShop {
         customers.remove(customerNumber);
     }
     
-    public void removeOrder (int orderNumber) throws NullOrderException {
+    public void removeOrder(int orderNumber) throws NullOrderException {
         Order order = getOrder(orderNumber);
         Customer customer = customers.get(order.customer);
         customer.orderNumbers.remove(orderNumber);
@@ -153,7 +161,7 @@ public class BikeShop {
     
     //FILE INTERACTIONS=========================================================
     
-    public String saveState () {
+    public String saveState() {
         String output = "";
         /*"addrp <brand> <tier> <price> <days> - add or update repair price\n"
         + "addc <first name> <last name> - add new customer\n"

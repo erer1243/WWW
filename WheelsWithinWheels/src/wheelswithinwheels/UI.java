@@ -1,7 +1,7 @@
 package wheelswithinwheels;
 
 import java.io.*;
-import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import javafx.util.Pair;
@@ -28,8 +28,6 @@ public class UI {
         + "savebs <filename> - save bike shop as a file of commands in file filename\n"
         + "restorebs <filename> - restore a previously saved bike shop file from file filename";
     
-    boolean restoring = false;
-    
     protected BikeShop bikeShop = new BikeShop();
     
     // Returns true if the program should continue, false on quit
@@ -37,7 +35,7 @@ public class UI {
         String[] commandParts = splitStringIntoParts(line),
                  args = Arrays.copyOfRange(commandParts, 1, commandParts.length);
         
-        try{
+        try {
             switch (commandParts[0]) {
                 case "quit":
                     System.out.println("Goodbye");
@@ -83,20 +81,24 @@ public class UI {
                     printTransactions(args);
                     break;
                 
+                case "printr":
+                    printReceivables(args);
+                    break;
+                    
                 case "prints":
                     printStatements(args);
                     break;
                 
                 case "readc":
-                    readScript(args);
+                    readScript(args, false);
                     break;
                     
                 case "savebs":
-                    saveState(args);
+                    saveBikeShop(args);
                     break;  
 
                 case "restorebs":
-                    restoreState(args);
+                    restoreBikeShop(args);
                     break;
                 
                 case "remc":
@@ -105,16 +107,6 @@ public class UI {
                     
                 case "remo":
                     removeOrder(args);
-                    break;
-
-                case "rnon":
-                    if (restoring) {updateOrderCounter(args);
-                    } else {System.out.println("Unknown command " + commandParts[0]);}
-                    break;
-                
-                case "rncn":
-                    if (restoring) {updateCustomerCounter(args);
-                    } else {System.out.println("Unknown command " + commandParts[0]);}
                     break;
 
                 case "":
@@ -156,7 +148,7 @@ public class UI {
         System.out.println("Data records reset");
     }
     
-    protected void handleBikeShopException (BikeShopException e) {
+    protected void handleBikeShopException(BikeShopException e) {
         if (e instanceof NullCustomerException) {
             NullCustomerException nce = (NullCustomerException) e;
             System.out.println("Invalid customer number: " + nce.getCustomerNumber());
@@ -171,17 +163,43 @@ public class UI {
         }
     }
     
-    protected void handleUIParseException (UIParseException e) {
+    protected void handleUIParseException(UIParseException e) {
         System.out.println("Invalid " + e.getArgument() + ": \"" + e.getInputted() + "\" is not a valid " + e.getExpectedType());
+    }
+    
+    protected void readScript(String[] args, boolean isRestoring) throws IOException, UIParseException {
+        File file = new File(args[0]);
+        
+        FileReader fileReader = new FileReader(file);
+        BufferedReader reader = new BufferedReader(fileReader);
+                
+        String line;
+        
+        if (isRestoring) {
+            while ((line = reader.readLine()) != null) {
+                String[] commandParts = splitStringIntoParts(line);
+                String command = commandParts[0];
+
+                if (command.equals("rnon"))
+                    updateOrderCounter(Arrays.copyOfRange(commandParts, 1, commandParts.length));
+                else if (command.equals("rncn"))
+                    updateCustomerCounter(Arrays.copyOfRange(commandParts, 1, commandParts.length));
+                else
+                    parseLine(line);
+            }
+        }
+        else
+            while ((line = reader.readLine()) != null)
+                parseLine(line);
     }
     
     //COMMANDS==================================================================
 
-    protected void help () {
+    protected void help() {
         System.out.println(helpMessage);
     }
     
-    protected void addRepairPrice (String[] args) throws UIParseException {
+    protected void addRepairPrice(String[] args) throws UIParseException {
         int price = Formatter.integer(args[2], "price");
         int days = Formatter.integer(args[3], "number of days");
         
@@ -193,12 +211,11 @@ public class UI {
     }
     
     protected void addCustomer(String[] args) {
-        
-        bikeShop.addCustomer(args[0], args[1]);
-        
+        int customerNumber = bikeShop.addCustomer(args[0], args[1]);
+        System.out.println("Customer " + args[0] + " " + args[1] + " given number: " + customerNumber);
     }
     
-    protected void addOrder (String[] args) throws UIParseException, BikeShopException {
+    protected void addOrder(String[] args) throws UIParseException, BikeShopException {
         int customerNumber = Formatter.integer(args[0], "customer number");
         Date date = Formatter.date(args[1]);
         String comment = String.join(" ", Arrays.copyOfRange(args, 4, args.length));
@@ -206,7 +223,7 @@ public class UI {
         bikeShop.addOrder(customerNumber, date, args[2], args[3], comment);
     }
     
-    protected void addPayment (String[] args) throws UIParseException, BikeShopException {
+    protected void addPayment(String[] args) throws UIParseException, BikeShopException {
         int customerNumber = Formatter.integer(args[0], "customer number");
         Date date = Formatter.date(args[1]);
         int amount = Formatter.integer(args[2], "amount");
@@ -214,24 +231,27 @@ public class UI {
         bikeShop.addPayment(customerNumber, date, amount);
     }
     
-    protected void markComplete (String[] args) throws UIParseException, BikeShopException {
+    protected void markComplete(String[] args) throws UIParseException, BikeShopException {
         int orderNumber = Formatter.integer(args[0], "order number");
         Date date = Formatter.date(args[1]);
         
         bikeShop.markComplete(orderNumber, date);
     }
     
-    protected void printRepairPrices (String[] args) {
+    protected void printRepairPrices(String[] args) {
         for (RepairPrice row : bikeShop.getRepairPrices()) {
             System.out.println(row);
         }
     }
     
-    protected void printCustomersByName (String[] args) {} //TODO
+    protected void printCustomersByName(String[] args) {
+        ArrayList<Customer> customers = bikeShop.getCustomers();
+        
+    } // TODO
     
-    protected void printCustomersByNumber (String[] args) {} //TODO
+    protected void printCustomersByNumber(String[] args) {} //TODO
     
-    protected void printOrders (String[] args) {
+    protected void printOrders(String[] args) {
         String orderString = "";
         for (Pair<Order, Customer> pair : bikeShop.getOrders()) {
             Order order = pair.getKey();
@@ -247,64 +267,86 @@ public class UI {
                     /*+ order.completedDate */
                     + "\n";
         }
+        if (orderString.equals("")) {
+            orderString = "No orders have been made yet";
+        }
         System.out.println(orderString);
     }
     
-    protected void printPayments (String[] args) {} //TODO
-    
-    protected void printTransactions (String[] args) {} //TODO
-    
-    protected void printReceivables (String[] args) {} //TODO
-    
-    protected void printStatements (String[] args) {} //TODO
-    
-    protected void readScript (String[] args) throws IOException {
-        File file = new File(args[0]);
-        
-        FileReader fileReader = new FileReader(file);
-        
-        BufferedReader reader = new BufferedReader(fileReader);
-                
-        String line = null;
-        while ((line = reader.readLine()) != null) {
-            parseLine(line);
+    protected void printPayments(String[] args) {
+        String output = "";
+        for (Customer c : bikeShop.getCustomers()) {
+            output += c.firstName + " " + c.lastName + ":\n";
+            
+            ArrayList<Payment> payments = c.payments;
+            for (Payment p : payments) {
+                output += p.toString() + "\n";
+            }
         }
+        if (output.equals("")) {
+            output = "No payments have been made yet";
+        }
+        System.out.println(output);
     }
+    
+    protected void printTransactions(String[] args) {} //TODO
+    
+    protected void printReceivables(String[] args) {
+        String output = "";
+        int totalOwed = 0;
+        for (Customer c : bikeShop.getCustomers()) {
+            output += c.firstName + " " + c.lastName + " owes: ";
+            int cPrice = 0;
+            for (Pair<Order, Customer> pair : bikeShop.getOrders()) {
+                Order order = pair.getKey();
+                Customer customer = pair.getValue();
+                
+                if (customer == c) {
+                    cPrice += order.price;
+                }
+            }
+            int amountDue = c.balance() - cPrice;
+            totalOwed += amountDue;
+            //Assumed that balance is never greater than totalPrice ie. totalDue is never negative
+            output += "$" + amountDue + "\n";
+        }
+        output += "\tTotal Accounts Receivable: $" + totalOwed;
+        System.out.println(output);
+    }
+    
+    protected void printStatements(String[] args) {} //TODO
      
-    protected void saveState (String[] args) throws IOException {
+    protected void saveBikeShop(String[] args) throws IOException {
         File file = new File(args[0]);
         file.createNewFile();
         
         FileWriter fileWriter = new FileWriter(file);
-        
         BufferedWriter writer = new BufferedWriter(fileWriter);
         
         writer.write(bikeShop.saveState());
         writer.close();
     }
     
-    protected void restoreState (String[] args) throws IOException {
+    protected void restoreBikeShop(String[] args) throws IOException, UIParseException {
         reset();
-        restoring = true;
-        readScript(args);
-        restoring = false;
+        readScript(args, true);
     }
     
-    protected void removeCustomer (String[] args) throws UIParseException {
+    protected void removeCustomer(String[] args) throws UIParseException {
         int customerNumber = Formatter.integer(args[0], "customer number");
     }
     
-    protected void removeOrder (String[] args) throws UIParseException {
+    protected void removeOrder(String[] args) throws UIParseException {
         int orderNumber = Formatter.integer(args[0], "order number");
     }
     
-    protected void updateOrderCounter (String[] args) throws UIParseException {
+    protected void updateOrderCounter(String[] args) throws UIParseException {
         int orderCounter = Formatter.integer(args[0], "order counter");
         
         bikeShop.updateOrderCounter(orderCounter);
     }
     
-    protected void updateCustomerCounter (String[] args) throws UIParseException {
+    protected void updateCustomerCounter(String[] args) throws UIParseException {
         int customerCounter = Formatter.integer(args[0], "customer counter");
         
         bikeShop.updateCustomerCounter(customerCounter);

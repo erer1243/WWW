@@ -14,7 +14,7 @@ public class Customer {
         this.lastName = lastName;
     }
     
-    public int balance () {
+    public int balance() {
         int sum = 0;
         for (Payment payment : payments) {
             sum += payment.amount;

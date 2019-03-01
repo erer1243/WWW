@@ -10,4 +10,8 @@ public class Payment {
         this.date = date;
         this.amount = amount;
     }
+    
+    public String toString() {
+        return "\t$" + amount + "\t\t" + date;
+    }
 }

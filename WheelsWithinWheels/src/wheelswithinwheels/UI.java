@@ -1,9 +1,7 @@
 package wheelswithinwheels;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
+import java.util.*;
 import javafx.util.Pair;
 
 public class UI {
@@ -239,6 +237,7 @@ public class UI {
     }
     
     protected void printRepairPrices(String[] args) {
+        System.out.println("All Repair Prices: ");
         for (RepairPrice row : bikeShop.getRepairPrices()) {
             System.out.println(row);
         }
@@ -278,8 +277,7 @@ public class UI {
         for (Customer c : bikeShop.getCustomers()) {
             output += c.firstName + " " + c.lastName + ":\n";
             
-            ArrayList<Payment> payments = c.payments;
-            for (Payment p : payments) {
+            for (Payment p : c.payments) {
                 output += p.toString() + "\n";
             }
         }
@@ -289,7 +287,45 @@ public class UI {
         System.out.println(output);
     }
     
-    protected void printTransactions(String[] args) {} //TODO
+    protected void printTransactions(String[] args) {
+        System.out.println("Printing All Transactions... ");
+        String output = "";
+        
+        output += "All Orders: \n";
+        int accumulatedPrice = 0;
+        for (Pair<Order, Customer> pair : bikeShop.getOrders()) {
+            Order order = pair.getKey();
+            Customer customer = pair.getValue();
+            
+            output += customer.toString() + "\t\t" 
+                    + order.brand + "\t" 
+                    + order.tier + "\t" 
+                    + order.price + "\t" 
+                    + order.promiseDate + "\t" 
+                    + order.completedDate + "\n";
+            
+            accumulatedPrice += order.price;
+        }
+        output += "\tTotal Owed: \t$" + accumulatedPrice + "\n";
+        
+        output += "All Payments: \n";
+        int totalPayments = 0;
+        ArrayList<Payment> allPayments = new ArrayList<>();
+        for (Customer c : bikeShop.getCustomers()) {
+            for (Payment p : c.payments) {
+                allPayments.add(p);
+            }
+        }
+        Collections.sort(allPayments);
+        for (Payment p : allPayments) {
+            output += p.toString() + "\n";
+            totalPayments += p.amount;
+        }
+        output += "\tTotal Payments: $" + totalPayments + "\n";
+        output += "Total Revenue: \t$" + (accumulatedPrice - totalPayments);
+        
+        System.out.println(output);
+    } //TODO
     
     protected void printReceivables(String[] args) {
         String output = "";
@@ -314,7 +350,40 @@ public class UI {
         System.out.println(output);
     }
     
-    protected void printStatements(String[] args) {} //TODO
+    protected void printStatements(String[] args) {
+        String output = "";
+        
+        for (Customer c : bikeShop.getCustomers()) {
+            output += c.firstName + " " + c.lastName + ": \n";
+            
+            int cTotalPrice = 0;
+            output += "Orders: \n";
+            for (Pair<Order, Customer> pair : bikeShop.getOrders()) {
+                Order order = pair.getKey();
+                Customer customer = pair.getValue();
+                
+                if (customer == c) {
+                    cTotalPrice += order.price;
+                    output += "\t" + order.startDate + " \t$" + order.price + " \n" ;
+                }
+            }
+            int amountDue = c.balance() - cTotalPrice;
+            output += "Total Price: \t$" + amountDue;
+            
+            output += "Payments: \n";
+            for (Payment p: c.payments) {
+                output += p.toString() + "\n";
+            }
+            output += "Total Payment: \t$" + c.balance() + "\n";
+            output += "Total Amount Owed: \t$" + (amountDue - c.balance());
+        }
+        
+        if (output == "") {
+            System.out.println("No statements available");
+        } else {
+            System.out.println(output);
+        }
+    } 
      
     protected void saveBikeShop(String[] args) throws IOException {
         File file = new File(args[0]);

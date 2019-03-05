@@ -2,7 +2,7 @@ package wheelswithinwheels;
 
 import java.util.Date;
 
-public class Payment {
+public class Payment implements Comparable<Payment>{
     final Date date;
     final int amount;
 
@@ -12,6 +12,10 @@ public class Payment {
     }
     
     public String toString() {
-        return "\t$" + amount + "\t\t" + date;
+        return "\t" + date + "\t\t$" + amount;
+    }
+    
+    public int compareTo(Payment p) {
+        return p.date.compareTo(this.date);
     }
 }

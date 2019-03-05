@@ -54,12 +54,16 @@ public class BikeShop {
         return customer;
     }
     
-    public int getCustomerDue(Customer customer) {
+    public int getCustomerCost(Customer customer) {
         int sum = 0;
-        for (int orderNumber : customer.orderNumbers) 
+        for (int orderNumber : customer.orderNumbers) {
             sum += orders.get(orderNumber).price;
-        
+        }
         return sum;
+    }
+    
+    public int getCustomerDue (Customer customer) {
+        return getCustomerCost(customer) - customer.paid();
     }
     
     //GET MULTIPLE==============================================================
@@ -72,16 +76,26 @@ public class BikeShop {
         return output;
     }
     
-    public ArrayList<RepairPrice> getRepairPrices() {
+    public ArrayList<RepairPrice> getRepairPrices () {
         return priceTable.getAll();
     }
     
-    public ArrayList<Customer> getCustomers() {
+    public ArrayList<Customer> getCustomers () {
         ArrayList<Customer> output = new ArrayList<>();
         for (Customer c : customers.values())
             output.add(c);
         
         return output;
+    }
+    
+    public ArrayList<Order> getOrdersOfCustomer (Customer customer) {
+        ArrayList<Order> orders = new ArrayList<>();
+        
+        for (int orderNumber : customer.orderNumbers) {
+            orders.add(orders.get(orderNumber));
+        }
+        
+        return orders;
     }
     
     //ADDS======================================================================

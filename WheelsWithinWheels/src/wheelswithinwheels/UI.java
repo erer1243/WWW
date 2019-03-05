@@ -29,9 +29,9 @@ public class UI {
     protected BikeShop bikeShop = new BikeShop();
     
     // Returns true if the program should continue, false on quit
-    public boolean parseLine(String line) throws IOException {
-        String[] commandParts = splitStringIntoParts(line),
-                 args = Arrays.copyOfRange(commandParts, 1, commandParts.length);
+    public boolean parseLine(String line, boolean isRestoring) throws IOException {
+        String[] commandParts = splitStringIntoParts(line);
+        String[] args = Arrays.copyOfRange(commandParts, 1, commandParts.length);
         
         try {
             switch (commandParts[0]) {
@@ -107,6 +107,22 @@ public class UI {
                     restoreBikeShop(args);
                     break;
                 
+                case "rncn":
+                    if (isRestoring) {
+                        updateCustomerCounter(args);
+                    } else {
+                        System.out.println("Unknown command " + commandParts[0]);
+                    }
+                    break;
+                    
+                case "rnon":
+                    if (isRestoring) {    
+                        updateOrderCounter(args);
+                    } else {
+                        System.out.println("Unknown command " + commandParts[0]);
+                    }
+                    break;
+                
                 case "remc":
                     removeCustomer(args);
                     break;
@@ -125,6 +141,8 @@ public class UI {
             handleUIParseException(e);
         } catch (BikeShopException e) {
             handleBikeShopException(e);
+        } catch (FileNotFoundException e) {
+            System.out.println("File does not exist.");
         }
         
         return true;
@@ -132,7 +150,7 @@ public class UI {
     
     public void run() throws IOException {
         // Running breaks when parseLine returns false
-        while (parseLine(getInputLine()));
+        while (parseLine(getInputLine(), false));
     }
     
     //HELPER METHODS============================================================
@@ -171,32 +189,6 @@ public class UI {
     
     protected void handleUIParseException(UIParseException e) {
         System.out.println("Invalid " + e.getArgument() + ": \"" + e.getInputted() + "\" is not a valid " + e.getExpectedType());
-    }
-    
-    protected void readScript(String[] args, boolean isRestoring) throws IOException, UIParseException {
-        File file = new File(args[0]);
-        
-        FileReader fileReader = new FileReader(file);
-        BufferedReader reader = new BufferedReader(fileReader);
-                
-        String line;
-        
-        if (isRestoring) {
-            while ((line = reader.readLine()) != null) {
-                String[] commandParts = splitStringIntoParts(line);
-                String command = commandParts[0];
-
-                if (command.equals("rnon"))
-                    updateOrderCounter(Arrays.copyOfRange(commandParts, 1, commandParts.length));
-                else if (command.equals("rncn"))
-                    updateCustomerCounter(Arrays.copyOfRange(commandParts, 1, commandParts.length));
-                else
-                    parseLine(line);
-            }
-        }
-        else
-            while ((line = reader.readLine()) != null)
-                parseLine(line);
     }
     
     //COMMANDS==================================================================
@@ -361,9 +353,9 @@ public class UI {
     protected void printReceivables(String[] args) {
         String output = "";
         int totalDue = 0;
-        for (Customer c : bikeShop.getCustomers()) {
-            output += c.firstName + " " + c.lastName + " owes: ";
-            int amountDue = c.paid() - bikeShop.getCustomerDue(c);
+        for (Customer customer : bikeShop.getCustomers()) {
+            output += customer.firstName + " " + customer.lastName + " owes: ";
+            int amountDue = bikeShop.getCustomerDue(customer);
             totalDue += amountDue;
             //Assumed that balance is never greater than totalPrice ie. totalDue is never negative
             output += "$" + amountDue + "\n";
@@ -375,29 +367,29 @@ public class UI {
     protected void printStatements(String[] args) {
         String output = "";
         
-        for (Customer c : bikeShop.getCustomers()) {
-            output += c.firstName + " " + c.lastName + ": \n";
+        for (Customer customer : bikeShop.getCustomers()) {
+            output += customer.firstName + " " + customer.lastName + ": \n";
             
-            int cTotalPrice = 0;
+            int customerCost = 0;
+            
             output += "Orders: \n";
-            for (int orderNumber : c.orderNumbers) {
-                try {
-                    Order order = bikeShop.getOrder(orderNumber);
-                    cTotalPrice += order.price;
-                    output += "\t" + order.startDate + " \t$" + order.price + " \n" ;
-                } catch (NullOrderException e) {} //Will never actually happen.  It's just here because bikeShop.orders shouldn't be accessed by other classes (even though it can)
+            for (Order order : bikeShop.getOrdersOfCustomer(customer)) {
+                customerCost += order.price;
+                output += "\t" + order.startDate + " \t$" + order.price + " \n" ;
             }
-            int cPaid = c.paid();
             
-            int amountDue = cPaid - cTotalPrice;
+            int customerPaid = customer.paid();
+            
+            int amountDue = customerCost - customerPaid;
+            
             output += "Total Price: \t$" + amountDue;
             
             output += "Payments: \n";
-            for (Payment p: c.payments) {
-                output += p.toString() + "\n";
+            for (Payment payment: customer.payments) {
+                output += payment.toString() + "\n";
             }
-            output += "Total Payment: \t$" + cPaid + "\n";
-            output += "Total Amount Owed: \t$" + (amountDue - cPaid);
+            output += "Total Payment: \t$" + customerPaid + "\n";
+            output += "Total Amount Owed: \t$" + (amountDue);
         }
         
         if (output == "") {
@@ -406,6 +398,23 @@ public class UI {
             System.out.println(output);
         }
     } 
+    
+    protected void readScript(String[] args, boolean isRestoring) throws IOException, UIParseException {
+        String fileName = String.join(" ", args);
+        System.out.println("|" + fileName + "|");
+        File file = new File(fileName);
+        
+        FileReader fileReader = new FileReader(file);
+        BufferedReader reader = new BufferedReader(fileReader);
+                
+        String line;
+        
+        while ((line = reader.readLine()) != null)
+            if (line != "") {
+                System.out.println(line);
+                parseLine(line, isRestoring);
+            }
+    }
      
     protected void saveBikeShop(String[] args) throws IOException {
         File file = new File(args[0]);

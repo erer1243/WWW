@@ -8,13 +8,13 @@ public class Customer {
     ArrayList<Payment> payments = new ArrayList<>();
     ArrayList<Integer> orderNumbers = new ArrayList<>();
     
-    public Customer(int number, String firstName, String lastName) {
+    public Customer (int number, String firstName, String lastName) {
         this.number = number;
         this.firstName = firstName;
         this.lastName = lastName;
     }
     
-    public int balance() {
+    public int paid () {
         int sum = 0;
         for (Payment payment : payments) {
             sum += payment.amount;
@@ -22,7 +22,7 @@ public class Customer {
         return sum;
     }
     
-    public String toString() {
+    public String toString () {
         return firstName + " " + lastName;
     }
 }

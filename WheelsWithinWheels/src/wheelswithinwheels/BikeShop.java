@@ -54,6 +54,14 @@ public class BikeShop {
         return customer;
     }
     
+    public int getCustomerDue (Customer customer) {
+        int sum = 0;
+        for (int orderNumber : customer.orderNumbers) {
+            sum += orders.get(orderNumber).price;
+        }
+        return sum;
+    }
+    
     //GET MULTIPLE==============================================================
     
     public ArrayList<Pair<Order, Customer>> getOrders () {

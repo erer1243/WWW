@@ -329,24 +329,15 @@ public class UI {
     
     protected void printReceivables(String[] args) {
         String output = "";
-        int totalOwed = 0;
+        int totalDue = 0;
         for (Customer c : bikeShop.getCustomers()) {
             output += c.firstName + " " + c.lastName + " owes: ";
-            int cPrice = 0;
-            for (Pair<Order, Customer> pair : bikeShop.getOrders()) {
-                Order order = pair.getKey();
-                Customer customer = pair.getValue();
-                
-                if (customer == c) {
-                    cPrice += order.price;
-                }
-            }
-            int amountDue = c.balance() - cPrice;
-            totalOwed += amountDue;
+            int amountDue = c.paid() - bikeShop.getCustomerDue(c);
+            totalDue += amountDue;
             //Assumed that balance is never greater than totalPrice ie. totalDue is never negative
             output += "$" + amountDue + "\n";
         }
-        output += "\tTotal Accounts Receivable: $" + totalOwed;
+        output += "\tTotal Accounts Receivable: $" + totalDue;
         System.out.println(output);
     }
     
@@ -358,24 +349,24 @@ public class UI {
             
             int cTotalPrice = 0;
             output += "Orders: \n";
-            for (Pair<Order, Customer> pair : bikeShop.getOrders()) {
-                Order order = pair.getKey();
-                Customer customer = pair.getValue();
-                
-                if (customer == c) {
+            for (int orderNumber : c.orderNumbers) {
+                try {
+                    Order order = bikeShop.getOrder(orderNumber);
                     cTotalPrice += order.price;
                     output += "\t" + order.startDate + " \t$" + order.price + " \n" ;
-                }
+                } catch (NullOrderException e) {} //Will never actually happen.  It's just here because bikeShop.orders shouldn't be accessed by other classes (even though it can)
             }
-            int amountDue = c.balance() - cTotalPrice;
+            int cPaid = c.paid();
+            
+            int amountDue = cPaid - cTotalPrice;
             output += "Total Price: \t$" + amountDue;
             
             output += "Payments: \n";
             for (Payment p: c.payments) {
                 output += p.toString() + "\n";
             }
-            output += "Total Payment: \t$" + c.balance() + "\n";
-            output += "Total Amount Owed: \t$" + (amountDue - c.balance());
+            output += "Total Payment: \t$" + cPaid + "\n";
+            output += "Total Amount Owed: \t$" + (amountDue - cPaid);
         }
         
         if (output == "") {

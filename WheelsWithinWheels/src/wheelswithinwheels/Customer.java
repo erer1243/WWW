@@ -14,7 +14,7 @@ public class Customer {
         this.lastName = lastName;
     }
     
-    public int paid () {
+    public int paid() {
         int sum = 0;
         for (Payment payment : payments) {
             sum += payment.amount;
@@ -22,7 +22,7 @@ public class Customer {
         return sum;
     }
     
-    public String toString () {
-        return firstName + " " + lastName;
+    public String toString() {
+        return lastName + ", " + firstName + " " + number;
     }
 }

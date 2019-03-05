@@ -91,6 +91,14 @@ public class UI {
                     readScript(args, false);
                     break;
                     
+                case "printcname":
+                    printCustomersByName();
+                    break;
+                    
+                case "printcnum":
+                    printCustomersByNumber();
+                    break;
+                    
                 case "savebs":
                     saveBikeShop(args);
                     break;  
@@ -158,7 +166,7 @@ public class UI {
         if (e instanceof NullPriceException) {
             NullPriceException npe = (NullPriceException) e;
             System.out.println("No price for brand: " + npe.getBrand() + ", tier: " + npe.getTier());
-        }
+        } 
     }
     
     protected void handleUIParseException(UIParseException e) {
@@ -243,12 +251,35 @@ public class UI {
         }
     }
     
-    protected void printCustomersByName(String[] args) {
+    protected void printCustomersByName() {
         ArrayList<Customer> customers = bikeShop.getCustomers();
+        if (customers.isEmpty()) {
+            System.out.println("No customers");
+            return;
+        }
         
-    } // TODO
+        Collections.sort(customers, 
+            (Customer c1, Customer c2) -> 
+                String.CASE_INSENSITIVE_ORDER.compare(c1.lastName, c2.lastName));
     
-    protected void printCustomersByNumber(String[] args) {} //TODO
+        for (Customer c : customers) 
+            System.out.println(c);
+        
+    } 
+    
+    protected void printCustomersByNumber() {
+       ArrayList<Customer> customers = bikeShop.getCustomers();
+       if (customers.isEmpty()) {
+           System.out.println("No customers");
+           return;
+       }
+       
+       Collections.sort(customers, 
+            (Customer c1, Customer c2) -> c1.number - c2.number);
+
+       for (Customer c : customers)
+           System.out.println(c);
+    }
     
     protected void printOrders(String[] args) {
         String orderString = "";
@@ -325,7 +356,7 @@ public class UI {
         output += "Total Revenue: \t$" + (accumulatedPrice - totalPayments);
         
         System.out.println(output);
-    } //TODO
+    } 
     
     protected void printReceivables(String[] args) {
         String output = "";

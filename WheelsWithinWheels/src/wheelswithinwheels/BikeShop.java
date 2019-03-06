@@ -19,15 +19,6 @@ public class BikeShop {
     public void updateOrderCounter(int newValue) {orderCounter = newValue;}
     public void updateCustomerCounter(int newValue) {customerCounter = newValue;}
     
-    protected boolean backwardsCompatability = true;
-    
-    public boolean isBackwardsCompatable() {
-        return backwardsCompatability;
-    }
-    
-    public void allowExtraFunctions() {
-        backwardsCompatability = false;
-    }
     //GETS======================================================================
     
     public RepairPrice getRepairPrice(String brand, String tier) throws NullPriceException {
@@ -54,16 +45,16 @@ public class BikeShop {
         return customer;
     }
     
-    public int getCustomerCost(Customer customer) {
+    public int getCustomerTransactionTotal(Customer customer) {
         int sum = 0;
-        for (int orderNumber : customer.orderNumbers) {
+        for (int orderNumber : customer.orderNumbers)
             sum += orders.get(orderNumber).price;
-        }
+        
         return sum;
     }
     
-    public int getCustomerDue (Customer customer) {
-        return getCustomerCost(customer) - customer.paid();
+    public int getCustomerDue(Customer customer) {
+        return getCustomerTransactionTotal(customer) - customer.paid();
     }
     
     //GET MULTIPLE==============================================================
@@ -76,11 +67,11 @@ public class BikeShop {
         return output;
     }
     
-    public ArrayList<RepairPrice> getRepairPrices () {
+    public ArrayList<RepairPrice> getRepairPrices() {
         return priceTable.getAll();
     }
     
-    public ArrayList<Customer> getCustomers () {
+    public ArrayList<Customer> getCustomers() {
         ArrayList<Customer> output = new ArrayList<>();
         for (Customer c : customers.values())
             output.add(c);

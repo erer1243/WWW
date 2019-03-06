@@ -16,32 +16,39 @@ public class BikeShop {
     protected HashMap<Integer, Customer> customers = new HashMap<>();
     protected int customerCounter = 0;
     
-    public void updateOrderCounter(int newValue) {orderCounter = newValue;}
-    public void updateCustomerCounter(int newValue) {customerCounter = newValue;}
+    // rncn
+    public void setOrderCounter(int newValue) {
+        orderCounter = newValue;
+    }
+    
+    // rnon
+    public void setCustomerCounter(int newValue) {
+        customerCounter = newValue;
+    }
     
     //GETS======================================================================
     
     public RepairPrice getRepairPrice(String brand, String tier) throws NullPriceException {
         RepairPrice row = priceTable.getPrice(brand, tier);
-        if (row == null) {
+        if (row == null)
             throw new NullPriceException(brand, tier);
-        }
+        
         return row;
     }
     
     public Order getOrder(int orderNumber) throws NullOrderException {
         Order order = orders.get(orderNumber);
-        if (order == null) {
+        if (order == null)
             throw new NullOrderException(orderNumber);
-        }
+        
         return order;
     }
     
     public Customer getCustomer(int customerNumber) throws NullCustomerException {
         Customer customer = customers.get(customerNumber);
-        if (customer == null) {
+        if (customer == null)
             throw new NullCustomerException(customerNumber);
-        }
+        
         return customer;
     }
     
@@ -79,12 +86,11 @@ public class BikeShop {
         return output;
     }
     
-    public ArrayList<Order> getOrdersOfCustomer (Customer customer) {
+    public ArrayList<Order> getOrdersOfCustomer(Customer customer) {
         ArrayList<Order> orders = new ArrayList<>();
         
-        for (int orderNumber : customer.orderNumbers) {
+        for (int orderNumber : customer.orderNumbers)
             orders.add(orders.get(orderNumber));
-        }
         
         return orders;
     }
@@ -113,16 +119,13 @@ public class BikeShop {
         if (customer == null) 
             throw new NullCustomerException(customerNumber);
         
-        
         RepairPrice row = priceTable.getPrice(brand, tier);
         if (row == null) 
             throw new NullPriceException(brand, tier);
         
-        
         int orderNumber = orderCounter++;
 
         customer.orderNumbers.add(orderNumber);
-        
         orders.put(orderNumber, new Order(
                 orderNumber,
                 customerNumber,
@@ -140,7 +143,6 @@ public class BikeShop {
         if (customer == null)
             throw new NullCustomerException(customerNumber);
         
-        
         customer.payments.add(new Payment(date, amount));
     }
     
@@ -150,7 +152,6 @@ public class BikeShop {
         Order order = getOrder(orderNumber);
         if (order == null)
             throw new NullOrderException(orderNumber);
-       
         
         order.completedDate = date;
     }
@@ -188,15 +189,15 @@ public class BikeShop {
             output += "addc "  +  customer.firstName + " " +  customer.lastName + "\n";
             
             for (Payment payment : customer.payments)
-                output += "addp " + customer.number + " " + Formatter.date(payment.date) + " " + payment.amount + "\n";
+                output += "addp " + customer.number + " " + Formatter.dateToString(payment.date) + " " + payment.amount + "\n";
         }
         
         for (Order order : orders.values()) {
             output += "rnon " + order.number + "\n";
-            output += "addo " + order.customer + " " + Formatter.date(order.startDate) + " " + order.brand + " " + order.tier + " " + order.comment + "\n";
+            output += "addo " + order.customer + " " + Formatter.dateToString(order.startDate) + " " + order.brand + " " + order.tier + " " + order.comment + "\n";
             
             if (order.completedDate != null)
-                output += "comp " + order.number + " " + Formatter.date(order.completedDate) + "\n";
+                output += "comp " + order.number + " " + Formatter.dateToString(order.completedDate) + "\n";
         }
         
         return output;

@@ -1,4 +1,5 @@
 package wheelswithinwheels;
+
 import java.util.ArrayList;
 
 public class Customer {
@@ -8,7 +9,7 @@ public class Customer {
     ArrayList<Payment> payments = new ArrayList<>();
     ArrayList<Integer> orderNumbers = new ArrayList<>();
     
-    public Customer (int number, String firstName, String lastName) {
+    public Customer(int number, String firstName, String lastName) {
         this.number = number;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -16,9 +17,9 @@ public class Customer {
     
     public int paid() {
         int sum = 0;
-        for (Payment payment : payments) {
+        for (Payment payment : payments)
             sum += payment.amount;
-        }
+        
         return sum;
     }
     

@@ -108,19 +108,17 @@ public class UI {
                     break;
                 
                 case "rncn":
-                    if (isRestoring) {
+                    if (isRestoring)
                         updateCustomerCounter(args);
-                    } else {
+                    else
                         System.out.println("Unknown command " + commandParts[0]);
-                    }
                     break;
                     
                 case "rnon":
-                    if (isRestoring) {    
+                    if (isRestoring)   
                         updateOrderCounter(args);
-                    } else {
+                    else
                         System.out.println("Unknown command " + commandParts[0]);
-                    }
                     break;
                 
                 case "remc":
@@ -198,8 +196,8 @@ public class UI {
     }
     
     protected void addRepairPrice(String[] args) throws UIParseException {
-        int price = Formatter.integer(args[2], "price");
-        int days = Formatter.integer(args[3], "number of days");
+        int price = Formatter.parseInt(args[2], "price");
+        int days = Formatter.parseInt(args[3], "number of days");
         
         try {
             bikeShop.addRepairPrice(args[0], args[1], price, days);
@@ -214,24 +212,24 @@ public class UI {
     }
     
     protected void addOrder(String[] args) throws UIParseException, BikeShopException {
-        int customerNumber = Formatter.integer(args[0], "customer number");
-        Date date = Formatter.date(args[1]);
+        int customerNumber = Formatter.parseInt(args[0], "customer number");
+        Date date = Formatter.stringToDate(args[1]);
         String comment = String.join(" ", Arrays.copyOfRange(args, 4, args.length));
         
         bikeShop.addOrder(customerNumber, date, args[2], args[3], comment);
     }
     
     protected void addPayment(String[] args) throws UIParseException, BikeShopException {
-        int customerNumber = Formatter.integer(args[0], "customer number");
-        Date date = Formatter.date(args[1]);
-        int amount = Formatter.integer(args[2], "amount");
+        int customerNumber = Formatter.parseInt(args[0], "customer number");
+        Date date = Formatter.stringToDate(args[1]);
+        int amount = Formatter.parseInt(args[2], "amount");
         
         bikeShop.addPayment(customerNumber, date, amount);
     }
     
     protected void markComplete(String[] args) throws UIParseException, BikeShopException {
-        int orderNumber = Formatter.integer(args[0], "order number");
-        Date date = Formatter.date(args[1]);
+        int orderNumber = Formatter.parseInt(args[0], "order number");
+        Date date = Formatter.stringToDate(args[1]);
         
         bikeShop.markComplete(orderNumber, date);
     }
@@ -274,8 +272,15 @@ public class UI {
     }
     
     protected void printOrders(String[] args) {
+        ArrayList<Pair<Order, Customer>> orders = bikeShop.getOrders();
+        
+        if (orders.isEmpty()) {
+            System.out.println("No orders have been made yet");
+            return;
+        }
+        
         String orderString = "";
-        for (Pair<Order, Customer> pair : bikeShop.getOrders()) {
+        for (Pair<Order, Customer> pair : orders) {
             Order order = pair.getKey();
             Customer customer = pair.getValue();
             
@@ -289,9 +294,7 @@ public class UI {
                     /*+ order.completedDate */
                     + "\n";
         }
-        if (orderString.equals("")) {
-            orderString = "No orders have been made yet";
-        }
+        
         System.out.println(orderString);
     }
     
@@ -300,13 +303,13 @@ public class UI {
         for (Customer c : bikeShop.getCustomers()) {
             output += c.firstName + " " + c.lastName + ":\n";
             
-            for (Payment p : c.payments) {
+            for (Payment p : c.payments)
                 output += p.toString() + "\n";
-            }
+            
         }
-        if (output.equals("")) {
+        if (output.equals(""))
             output = "No payments have been made yet";
-        }
+        
         System.out.println(output);
     }
     
@@ -334,11 +337,11 @@ public class UI {
         output += "All Payments: \n";
         int totalPayments = 0;
         ArrayList<Payment> allPayments = new ArrayList<>();
-        for (Customer c : bikeShop.getCustomers()) {
-            for (Payment p : c.payments) {
+        
+        for (Customer c : bikeShop.getCustomers())
+            for (Payment p : c.payments)
                 allPayments.add(p);
-            }
-        }
+        
         Collections.sort(allPayments);
         for (Payment p : allPayments) {
             output += p.toString() + "\n";
@@ -385,18 +388,18 @@ public class UI {
             output += "Total Price: \t$" + amountDue;
             
             output += "Payments: \n";
-            for (Payment payment: customer.payments) {
+            for (Payment payment: customer.payments)
                 output += payment.toString() + "\n";
-            }
+            
             output += "Total Payment: \t$" + customerPaid + "\n";
             output += "Total Amount Owed: \t$" + (amountDue);
         }
         
-        if (output == "") {
+        if (output.equals("")) 
             System.out.println("No statements available");
-        } else {
+        else 
             System.out.println(output);
-        }
+        
     } 
     
     protected void readScript(String[] args, boolean isRestoring) throws IOException, UIParseException {
@@ -410,7 +413,7 @@ public class UI {
         String line;
         
         while ((line = reader.readLine()) != null)
-            if (line != "") {
+            if (!line.equals("")) {
                 System.out.println(line);
                 parseLine(line, isRestoring);
             }
@@ -433,22 +436,22 @@ public class UI {
     }
     
     protected void removeCustomer(String[] args) throws UIParseException {
-        int customerNumber = Formatter.integer(args[0], "customer number");
+        int customerNumber = Formatter.parseInt(args[0], "customer number");
     }
     
     protected void removeOrder(String[] args) throws UIParseException {
-        int orderNumber = Formatter.integer(args[0], "order number");
+        int orderNumber = Formatter.parseInt(args[0], "order number");
     }
     
     protected void updateOrderCounter(String[] args) throws UIParseException {
-        int orderCounter = Formatter.integer(args[0], "order counter");
+        int orderCounter = Formatter.parseInt(args[0], "order counter");
         
-        bikeShop.updateOrderCounter(orderCounter);
+        bikeShop.setOrderCounter(orderCounter);
     }
     
     protected void updateCustomerCounter(String[] args) throws UIParseException {
-        int customerCounter = Formatter.integer(args[0], "customer counter");
+        int customerCounter = Formatter.parseInt(args[0], "customer counter");
         
-        bikeShop.updateCustomerCounter(customerCounter);
+        bikeShop.setCustomerCounter(customerCounter);
     }
 }

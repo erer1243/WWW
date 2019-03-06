@@ -8,7 +8,8 @@ public class Order {
     String brand, tier, comment;
     Date startDate, promiseDate, completedDate = null;
     
-    public Order(int number, int customer, String brand, String tier, int price, Date startDate, int days, String comment) {
+    public Order(int number, int customer, String brand, String tier, 
+                 int price, Date startDate, int days, String comment) {
         this.number = number;
         this.customer = customer;
         this.brand = brand;

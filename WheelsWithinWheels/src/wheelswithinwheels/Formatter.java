@@ -5,7 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Formatter {
-    public static Date date (String input) throws UIParseException {
+    public static Date stringToDate(String input) throws UIParseException {
         try {
             return format.parse(input);
         } catch (ParseException e) {
@@ -13,11 +13,11 @@ public class Formatter {
         }
     }
     
-    public static String date (Date input) {
+    public static String dateToString(Date input) {
         return format.format(input);
     }
     
-    public static int integer (String input, String why) throws UIParseException {
+    public static int parseInt(String input, String why) throws UIParseException {
         try {
             return Integer.parseInt(input);
         } catch (NumberFormatException e) {

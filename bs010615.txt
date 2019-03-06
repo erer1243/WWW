@@ -1,0 +1,132 @@
+rncn 0
+addc Fred Jones
+rncn 1
+addc Sam Spade
+rncn 2
+addc Sue Sherman
+rncn 3
+addc Beth Cohen
+rncn 4
+addc Lamont Stewart
+rncn 5
+addc Irving Hiller
+rncn 6
+addc Kate Fellman
+rncn 7
+addc Carol Smith
+rncn 8
+addc Stanley Silver
+rncn 9
+addc Leslie Kwan
+addrp cannondade gold 60 7
+addrp jamis gold 60 7
+addrp soma silver 65 4
+addrp bianchi gold 85 7
+addrp giant gold 60 7
+addrp giant silver 40 4
+addrp soma gold 80 7
+addrp specialized platinum 117 10
+addrp bianchi platinum 135 10
+addrp cervelo platinum 120 10
+addrp cannondale silver 40 4
+addrp huffy platinum 105 10
+addrp jamis platinum 100 10
+addrp cannondale platinum 100 10
+addrp jamis silver 40 4
+addrp surly silver 45 4
+addrp huffy silver 45 4
+addrp specialized silver 50 4
+addrp bianchi silver 65 4
+addrp surly gold 60 7
+addrp cervelo silver 60 4
+addrp soma platinum 135 10
+addrp specialized gold 70 7
+addrp huffy gold 60 7
+addrp trek silver 40 4
+addrp trek gold 60 7
+addrp trek platinum 100 10
+addrp giant platinum 105 10
+addrp cervelo gold 75 7
+addrp surly platinum 105 10
+rnon 8
+addo 0 08132015 trek silver 
+comp 8 08182015
+rnon 18
+addo 0 08272015 huffy silver 
+rnon 21
+addo 0 08182015 bianchi gold 
+addp 0 08282015 40
+rnon 1
+addo 1 08012015 specialized silver 
+comp 1 08062015
+rnon 16
+addo 1 08222015 surly silver   extra tube
+addp 1 08152015 40
+rnon 2
+addo 2 08022015 surly platinum 
+comp 2 08072015
+rnon 9
+addo 2 08142015 huffy gold 
+comp 9 08192015
+rnon 17
+addo 2 08222015 soma platinum 
+addp 2 08182015 200
+rnon 7
+addo 3 08102015 specialized silver 
+comp 7 08162015
+rnon 20
+addo 3 08302015 bianchi platinum 
+addp 3 08152015 50
+rnon 3
+addo 4 08042015 huffy gold 
+comp 3 08092015
+rnon 4
+addo 4 08042015 specialized silver   polish fender
+comp 4 08102015
+rnon 22
+addo 4 08202015 jamis silver 
+addp 4 08152015 110
+rnon 10
+addo 5 08152015 specialized silver 
+comp 10 08202015
+rnon 23
+addo 5 08132015 soma gold 
+addp 5 08052015 25
+addp 5 08072015 25
+rnon 11
+addo 6 08152015 cannondale platinum   replace break cable
+comp 11 08202015
+rnon 12
+addo 6 08182015 huffy gold 
+comp 12 08232015
+rnon 24
+addo 6 08222015 huffy gold 
+rnon 6
+addo 7 08102015 jamis gold 
+comp 6 08152015
+rnon 15
+addo 7 08222015 giant gold 
+addp 7 08152015 60
+rnon 5
+addo 8 08062015 bianchi silver 
+comp 5 08112015
+rnon 14
+addo 8 08202015 jamis silver 
+comp 14 08272015
+rnon 19
+addo 8 08292015 giant silver   examine chain
+addp 8 08082015 65
+addp 8 08222015 40
+rnon 0
+addo 9 08012015 huffy gold 
+comp 0 08062015
+rnon 13
+addo 9 08182015 surly silver 
+comp 13 08252015
+rnon 25
+addo 9 08292015 specialized platinum 
+addp 9 08192015 40
+addp 9 08242015 40
+addp 9 08282015 40
+rncn 10
+rnon 26

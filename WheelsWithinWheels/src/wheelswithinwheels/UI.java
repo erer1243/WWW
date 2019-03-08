@@ -28,6 +28,8 @@ public class UI {
     
     protected BikeShop bikeShop = new BikeShop();
     
+    protected Stack<String> readingFiles = new Stack<>();
+    
     // Returns true if the program should continue, false on quit
     public boolean parseLine(String line, boolean isRestoring) throws IOException {
         String[] commandParts = splitStringIntoParts(line);
@@ -404,7 +406,14 @@ public class UI {
     
     protected void readScript(String[] args, boolean isRestoring) throws IOException, UIParseException {
         String fileName = String.join(" ", args);
-        System.out.println("|" + fileName + "|");
+        
+        if (readingFiles.search(fileName) > 0) {
+            System.out.println("Recursive usage of readc is not allowed.");
+            return;
+        }
+        readingFiles.push(fileName);
+        System.out.println("Now reading " + fileName);
+        
         File file = new File(fileName);
         
         FileReader fileReader = new FileReader(file);
@@ -412,11 +421,15 @@ public class UI {
                 
         String line;
         
-        while ((line = reader.readLine()) != null)
+        while ((line = reader.readLine()) != null) {
             if (!line.equals("")) {
                 System.out.println(line);
                 parseLine(line, isRestoring);
             }
+        }
+        
+        readingFiles.pop();
+        System.out.println("Done reading " + fileName);
     }
      
     protected void saveBikeShop(String[] args) throws IOException {

@@ -1,7 +1,7 @@
 package wheelswithinwheels;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Date;
 import javafx.util.Pair;
 
 public class BikeShop {
@@ -114,7 +114,7 @@ public class BikeShop {
         return customerNumber;
     }
     
-    public void addOrder(int customerNumber, Date date, String brand, String tier, String comment) throws NullCustomerException, NullPriceException {
+    public void addOrder(int customerNumber, LocalDate date, String brand, String tier, String comment) throws NullCustomerException, NullPriceException {
         Customer customer = getCustomer(customerNumber);
         if (customer == null) 
             throw new NullCustomerException(customerNumber);
@@ -138,7 +138,7 @@ public class BikeShop {
         ));
     }
     
-    public void addPayment(int customerNumber, Date date, int amount) throws NullCustomerException {
+    public void addPayment(int customerNumber, LocalDate date, int amount) throws NullCustomerException {
         Customer customer = getCustomer(customerNumber);
         if (customer == null)
             throw new NullCustomerException(customerNumber);
@@ -148,7 +148,7 @@ public class BikeShop {
     
     //EDITS=====================================================================
     
-    public void markComplete(int orderNumber, Date date) throws NullOrderException {
+    public void markComplete(int orderNumber, LocalDate date) throws NullOrderException {
         Order order = getOrder(orderNumber);
         if (order == null)
             throw new NullOrderException(orderNumber);

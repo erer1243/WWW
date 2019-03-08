@@ -1,6 +1,7 @@
 package wheelswithinwheels;
 
 import java.io.*;
+import java.time.LocalDate;
 import java.util.*;
 import javafx.util.Pair;
 
@@ -215,7 +216,7 @@ public class UI {
     
     protected void addOrder(String[] args) throws UIParseException, BikeShopException {
         int customerNumber = Formatter.parseInt(args[0], "customer number");
-        Date date = Formatter.stringToDate(args[1]);
+        LocalDate date = Formatter.stringToDate(args[1]);
         String comment = String.join(" ", Arrays.copyOfRange(args, 4, args.length));
         
         bikeShop.addOrder(customerNumber, date, args[2], args[3], comment);
@@ -223,7 +224,7 @@ public class UI {
     
     protected void addPayment(String[] args) throws UIParseException, BikeShopException {
         int customerNumber = Formatter.parseInt(args[0], "customer number");
-        Date date = Formatter.stringToDate(args[1]);
+        LocalDate date = Formatter.stringToDate(args[1]);
         int amount = Formatter.parseInt(args[2], "amount");
         
         bikeShop.addPayment(customerNumber, date, amount);
@@ -231,7 +232,7 @@ public class UI {
     
     protected void markComplete(String[] args) throws UIParseException, BikeShopException {
         int orderNumber = Formatter.parseInt(args[0], "order number");
-        Date date = Formatter.stringToDate(args[1]);
+        LocalDate date = Formatter.stringToDate(args[1]);
         
         bikeShop.markComplete(orderNumber, date);
     }

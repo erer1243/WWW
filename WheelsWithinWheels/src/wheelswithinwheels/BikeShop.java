@@ -87,12 +87,12 @@ public class BikeShop {
     }
     
     public ArrayList<Order> getOrdersOfCustomer(Customer customer) {
-        ArrayList<Order> orders = new ArrayList<>();
+        ArrayList<Order> customerOrders = new ArrayList<>();
         
         for (int orderNumber : customer.orderNumbers)
-            orders.add(orders.get(orderNumber));
+            customerOrders.add(orders.get(orderNumber));
         
-        return orders;
+        return customerOrders;
     }
     
     //ADDS======================================================================

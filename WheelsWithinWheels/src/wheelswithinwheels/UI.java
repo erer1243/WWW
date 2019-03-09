@@ -192,6 +192,23 @@ public class UI {
         System.out.println("Invalid " + e.getArgument() + ": \"" + e.getInputted() + "\" is not a valid " + e.getExpectedType());
     }
     
+    public String fit(String s, int size, boolean right) {
+        String result = "";
+        int sSize = s.length();
+        if (sSize == size) return s;
+        if (size < sSize) return s.substring(0, size);
+        result = s;
+        String addon = "";
+        int num = size - sSize;
+        for (int i = 0; i < num; i++) {
+            addon += " ";
+        }
+        if (right) {
+            return result + addon;
+        }
+        return addon + result;
+    }
+    
     //COMMANDS==================================================================
 
     protected void help() {
@@ -239,8 +256,18 @@ public class UI {
     
     protected void printRepairPrices(String[] args) {
         System.out.println("All Repair Prices: ");
+        ArrayList<String> allRPs = new ArrayList<>();
         for (RepairPrice row : bikeShop.getRepairPrices()) {
-            System.out.println(row);
+            String thisRP = "\t";
+            thisRP += fit(row.brand, 15, true) 
+                    + fit(row.tier, 15, true)
+                    + row.price + "\t"
+                    + row.days;
+            allRPs.add(thisRP);
+        }
+        Collections.sort(allRPs); 
+        for (String s : allRPs){
+            System.out.println(s);
         }
     }
     
@@ -280,38 +307,53 @@ public class UI {
         if (orders.isEmpty()) {
             System.out.println("No orders have been made yet");
             return;
+        } else {
+            String orderString = "Order#\t" 
+                    + fit("Customer", 20, true) + "\t"
+                    + fit("Brand", 15, true)
+                    + fit("Tier", 15, true)
+                    + "Price\tPromise Date\tCompleted Date\tComment\n";
+                    
+            for (Pair<Order, Customer> pair : orders) {
+                Order order = pair.getKey();
+                Customer customer = pair.getValue();
+
+                orderString += order.number + "\t" 
+                        + fit(customer.firstName + " " + customer.lastName, 20, true)
+                        + customer.number + "\t"
+                        + fit(order.brand, 15, true)
+                        + fit(order.tier, 15, true)
+                        + "$" + order.price + "\t" 
+                        + order.promiseDate + "\t";
+                if (order.completedDate == null) {
+                    orderString += "Incomplete\t";
+                } else {
+                    orderString += order.completedDate + "\t";
+                }
+                orderString += order.comment + "\n";
+                        
+            }
+
+            System.out.println(orderString);
         }
-        
-        String orderString = "";
-        for (Pair<Order, Customer> pair : orders) {
-            Order order = pair.getKey();
-            Customer customer = pair.getValue();
-            
-            orderString += order.number + "\t" 
-                    + customer.toString() + "\t\t" 
-                    + order.brand + "\t" 
-                    + order.tier + "\t" 
-                    + order.price + "\t" 
-                    + order.comment + "\t"
-                    /*+ order.promiseDate + "\t"*/ 
-                    /*+ order.completedDate */
-                    + "\n";
-        }
-        
-        System.out.println(orderString);
     }
     
     protected void printPayments(String[] args) {
         String output = "";
+        int totalPayments = 0;
         for (Customer c : bikeShop.getCustomers()) {
             output += c.firstName + " " + c.lastName + ":\n";
             
-            for (Payment p : c.payments)
-                output += p.toString() + "\n";
-            
+            for (Payment p : c.payments) {
+                output += "\t" + p.date + "\t\t$" + p.amount + "\n";
+                totalPayments = p.amount;
+            }
         }
-        if (output.equals(""))
+        if (output.equals("")) {
             output = "No payments have been made yet";
+        } else {
+            output += "Total Payments: $" + totalPayments;
+        }
         
         System.out.println(output);
     }
@@ -322,36 +364,49 @@ public class UI {
         
         output += "All Orders: \n";
         int accumulatedPrice = 0;
+        int completedPrice = 0;
         for (Pair<Order, Customer> pair : bikeShop.getOrders()) {
             Order order = pair.getKey();
             Customer customer = pair.getValue();
             
-            output += customer.toString() + "\t\t" 
-                    + order.brand + "\t" 
-                    + order.tier + "\t" 
-                    + order.price + "\t" 
-                    + order.promiseDate + "\t" 
-                    + order.completedDate + "\n";
+            output += "\t" + fit(customer.firstName + " " + customer.lastName, 20, true)
+                    + fit(order.brand, 15, true)
+                    + fit(order.tier, 15, true);
+            if (order.completedDate == null) {
+                output += "Incomplete\t";
+            } else {
+                output += order.completedDate + "\t";
+            }
+            output += "$" + order.price + "\n" ;
             
             accumulatedPrice += order.price;
+            if (order.completedDate != null) {
+                completedPrice += order.price;
+            }
         }
-        output += "\tTotal Owed: \t$" + accumulatedPrice + "\n";
+        output += "Total Price: $" + accumulatedPrice + "\n";
+        output += "Total Price of Completed Orders: $" + completedPrice + "\n";
         
         output += "All Payments: \n";
         int totalPayments = 0;
-        ArrayList<Payment> allPayments = new ArrayList<>();
+        ArrayList<String> allPayments = new ArrayList<>();
         
-        for (Customer c : bikeShop.getCustomers())
-            for (Payment p : c.payments)
-                allPayments.add(p);
+        for (Customer c : bikeShop.getCustomers()){
+            for (Payment p : c.payments) {
+                String thisPayment = "\t" + p.date
+                        + "\t" + fit(c.firstName + " " + c.lastName, 20, true)
+                        + "$" + p.amount;
+                allPayments.add(thisPayment);
+                totalPayments += p.amount;
+            }
+        }
         
         Collections.sort(allPayments);
-        for (Payment p : allPayments) {
-            output += p.toString() + "\n";
-            totalPayments += p.amount;
+        for (String s : allPayments) {
+            output += s + "\n";
         }
-        output += "\tTotal Payments: $" + totalPayments + "\n";
-        output += "Total Revenue: \t$" + (accumulatedPrice - totalPayments);
+        output += "Total Payments: $" + totalPayments + "\n";
+        output += "Total Amount Owed: $" + (accumulatedPrice - totalPayments);
         
         System.out.println(output);
     } 
@@ -360,42 +415,40 @@ public class UI {
         String output = "";
         int totalDue = 0;
         for (Customer customer : bikeShop.getCustomers()) {
-            output += customer.firstName + " " + customer.lastName + " owes: ";
+            output += "\t" + fit(customer.firstName + " " + customer.lastName + " owes: ", 24, true) ;
             int amountDue = bikeShop.getCustomerDue(customer);
             totalDue += amountDue;
             //Assumed that balance is never greater than totalPrice ie. totalDue is never negative
             output += "$" + amountDue + "\n";
         }
-        output += "\tTotal Accounts Receivable: $" + totalDue;
+        output += "Total Accounts Receivable: $" + totalDue;
         System.out.println(output);
     }
     
     protected void printStatements(String[] args) {
-        String output = "";
+        String output = "Printing Statements for All Customers... \n";
         
         for (Customer customer : bikeShop.getCustomers()) {
             output += customer.firstName + " " + customer.lastName + ": \n";
             
             int customerCost = 0;
-            
-            output += "Orders: \n";
+            output += "\tOrders: \n";
             for (Order order : bikeShop.getOrdersOfCustomer(customer)) {
                 customerCost += order.price;
-                output += "\t" + order.startDate + " \t$" + order.price + " \n" ;
+                output += "\t\t" + order.startDate + " \t$" + order.price + " \n" ;
+            }
+            output += "\t  Total Price: \t\t$" + customerCost + "\n";
+            
+            output += "\tPayments: \n";
+            for (Payment payment: customer.payments) {
+                output += "\t\t" + payment.date + " \t$" + payment.amount + "\n";
             }
             
             int customerPaid = customer.paid();
-            
             int amountDue = customerCost - customerPaid;
-            
-            output += "Total Price: \t$" + amountDue;
-            
-            output += "Payments: \n";
-            for (Payment payment: customer.payments)
-                output += payment.toString() + "\n";
-            
-            output += "Total Payment: \t$" + customerPaid + "\n";
-            output += "Total Amount Owed: \t$" + (amountDue);
+            output += "\t  Total Payment: \t$" + customerPaid + "\n";
+            //output += "\tTotal Amount Owed: \t$" + customerCost + " - $" + customerPaid + " = $" + amountDue + "\n\n";
+            output += "\tTotal Amount Owed: \t$" + amountDue + "\n\n";
         }
         
         if (output.equals("")) 

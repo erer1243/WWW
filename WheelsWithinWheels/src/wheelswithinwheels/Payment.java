@@ -12,7 +12,7 @@ public class Payment implements Comparable<Payment>{
     }
     
     public String toString() {
-        return "\t" + Formatter.dateToString(date) + "\t\t$" + amount;
+        return Formatter.dateToString(date) + "\t\t$" + amount;
     }
     
     public int compareTo(Payment p) {

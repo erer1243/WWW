@@ -12,6 +12,6 @@ public class RepairPrice {
     }
     
     public String toString() {
-        return brand + "\t" + tier + "\t" + price + "\t" + days;
+        return "\t" + brand + "\t\t" + tier + "\t\t" + price + "\t" + days;
     }
 }

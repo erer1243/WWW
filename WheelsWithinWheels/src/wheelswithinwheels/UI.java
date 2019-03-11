@@ -374,7 +374,7 @@ public class UI {
             
             for (Payment p : c.payments) {
                 output += "\t" + p.date + "\t\t$" + p.amount + "\n";
-                totalPayments = p.amount;
+                totalPayments += p.amount;
             }
         }
         if (output.equals("")) {

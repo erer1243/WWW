@@ -177,10 +177,6 @@ public class BikeShop {
     
     public String saveState() {
         String output = "";
-        /*"addrp <brand> <tier> <price> <days> - add or update repair price\n"
-        + "addc <first name> <last name> - add new customer\n"
-        + "addo <customer number> <date> <brand> <level> <comment> - add new order\n"
-        + "addp <customer number> <date> <amount> - add new payment\n"*/
         for (RepairPrice row : priceTable.getAll())
             output += "addrp " + " " +  row.brand + " " +  row.tier + " " +  row.price + " " +  row.days + "\n";
         

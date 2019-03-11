@@ -104,8 +104,7 @@ public class UI {
                     break;
                 
                 case "readc":
-                    if (checkNumberArgs(1, args))
-                        readScript(args, false);
+                    readScript(args, false); //filenames can have spaces
                     break;
                     
                 case "printcname":
@@ -117,13 +116,11 @@ public class UI {
                     break;
                     
                 case "savebs":
-                    if (checkNumberArgs(1, args))
-                        saveBikeShop(args);
+                    saveBikeShop(args); //filenames can have spaces
                     break;  
 
                 case "restorebs":
-                    if (checkNumberArgs(1, args))
-                        restoreBikeShop(args);
+                    restoreBikeShop(args); //filenames can have spaces
                     break;
                 
                 case "rncn":

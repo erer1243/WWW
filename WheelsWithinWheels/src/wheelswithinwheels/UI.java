@@ -126,14 +126,14 @@ public class UI {
                     if (isRestoring)
                         updateCustomerCounter(args);
                     else
-                        System.out.println("Unknown command " + commandParts[0]);
+                        System.out.println("rncn is only allowed in restorebs files");
                     break;
                     
                 case "rnon":
                     if (isRestoring)   
                         updateOrderCounter(args);
                     else
-                        System.out.println("Unknown command " + commandParts[0]);
+                        System.out.println("rnon is only allowed in restorebs files");
                     break;
                 
                 case "remc":
@@ -209,7 +209,7 @@ public class UI {
         System.out.println("Invalid " + e.getArgument() + ": \"" + e.getInputted() + "\" is not a valid " + e.getExpectedType());
     }
     
-    public String fit(String s, int size, boolean right) {
+    protected String fit(String s, int size, boolean right) {
         String result = "";
         int sSize = s.length();
         if (sSize == size) return s;
@@ -224,6 +224,18 @@ public class UI {
             return result + addon;
         }
         return addon + result;
+    }
+    
+    // for printcnum/printCustomersByNumber and printcname/printCustomersByName
+    protected void printCustomerList(ArrayList<Customer> customers) {
+        for (Customer c : customers)
+            System.out.println(
+                      fit(Integer.toString(c.number), 3, true)
+                    + " "
+                    + fit(c.lastName + ",", 10, false)
+                    + " "
+                    + fit(c.firstName, 10, true)
+            );
     }
     
     //COMMANDS==================================================================
@@ -299,8 +311,7 @@ public class UI {
             (Customer c1, Customer c2) -> 
                 String.CASE_INSENSITIVE_ORDER.compare(c1.lastName, c2.lastName));
     
-        for (Customer c : customers) 
-            System.out.println(c);
+        printCustomerList(customers);
         
     } 
     
@@ -314,8 +325,7 @@ public class UI {
        Collections.sort(customers, 
             (Customer c1, Customer c2) -> c1.number - c2.number);
 
-       for (Customer c : customers)
-           System.out.println(c);
+       printCustomerList(customers);
     }
     
     protected void printOrders() {

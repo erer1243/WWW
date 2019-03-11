@@ -34,6 +34,10 @@ public class UI {
     // Returns true if the program should continue, false on quit
     public boolean parseLine(String line, boolean isRestoring) throws IOException {
         String[] commandParts = splitStringIntoParts(line);
+        
+        if (commandParts.length == 0)
+            return true;
+        
         String[] args = Arrays.copyOfRange(commandParts, 1, commandParts.length);
         
         try {
@@ -138,9 +142,6 @@ public class UI {
                     
                 case "remo":
                     removeOrder(args);
-                    break;
-
-                case "":
                     break;
 
                 default:

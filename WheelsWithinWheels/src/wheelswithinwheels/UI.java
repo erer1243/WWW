@@ -61,7 +61,11 @@ public class UI {
                     break;
 
                 case "addo":
-                    if (checkNumberArgs(5, args))
+                    /* not using checkNumberArgs because addo is a special case 
+                       in that it has an optional comment of indefinite length */
+                    if (args.length < 4)
+                        System.out.println("Expected at least 4 arguments but got " + args.length);
+                    else
                         addOrder(args);
                     break;    
 

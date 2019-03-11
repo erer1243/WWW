@@ -72,27 +72,27 @@ public class UI {
                     break;    
                 
                 case "printrp":
-                    printRepairPrices(args);
+                    printRepairPrices();
                     break;
 
                 case "printo":
-                    printOrders(args);
+                    printOrders();
                     break;
                 
                 case "printp":
-                    printPayments(args);
+                    printPayments();
                     break;
                 
                 case "printt":
-                    printTransactions(args);
+                    printTransactions();
                     break;
                 
                 case "printr":
-                    printReceivables(args);
+                    printReceivables();
                     break;
                     
                 case "prints":
-                    printStatements(args);
+                    printStatements();
                     break;
                 
                 case "readc":
@@ -166,11 +166,10 @@ public class UI {
     
     protected boolean checkNumberArgs(int targetArgs, String[] args) {
         if (targetArgs != args.length) {
-            System.out.println("Expected " + targetArgs + " argument(s)");
+            System.out.println("Expected " + targetArgs + " argument(s) but got " + args.length);
             return false;
-        }
-        
-        return true;
+        } else
+            return true;
     }
     
     protected String getInputLine() throws IOException {
@@ -271,7 +270,7 @@ public class UI {
         bikeShop.markComplete(orderNumber, date);
     }
     
-    protected void printRepairPrices(String[] args) {
+    protected void printRepairPrices() {
         System.out.println("All Repair Prices: ");
         ArrayList<String> allRPs = new ArrayList<>();
         for (RepairPrice row : bikeShop.getRepairPrices()) {
@@ -318,7 +317,7 @@ public class UI {
            System.out.println(c);
     }
     
-    protected void printOrders(String[] args) {
+    protected void printOrders() {
         ArrayList<Pair<Order, Customer>> orders = bikeShop.getOrders();
         
         if (orders.isEmpty()) {
@@ -355,7 +354,7 @@ public class UI {
         }
     }
     
-    protected void printPayments(String[] args) {
+    protected void printPayments() {
         String output = "";
         int totalPayments = 0;
         for (Customer c : bikeShop.getCustomers()) {
@@ -375,7 +374,7 @@ public class UI {
         System.out.println(output);
     }
     
-    protected void printTransactions(String[] args) {
+    protected void printTransactions() {
         System.out.println("Printing All Transactions... ");
         String output = "";
         
@@ -428,7 +427,7 @@ public class UI {
         System.out.println(output);
     } 
     
-    protected void printReceivables(String[] args) {
+    protected void printReceivables() {
         String output = "";
         int totalDue = 0;
         for (Customer customer : bikeShop.getCustomers()) {
@@ -442,7 +441,7 @@ public class UI {
         System.out.println(output);
     }
     
-    protected void printStatements(String[] args) {
+    protected void printStatements() {
         String output = "Printing Statements for All Customers... \n";
         
         for (Customer customer : bikeShop.getCustomers()) {

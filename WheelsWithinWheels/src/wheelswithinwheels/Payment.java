@@ -1,18 +1,18 @@
 package wheelswithinwheels;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class Payment implements Comparable<Payment>{
-    final Date date;
+    final LocalDate date;
     final int amount;
 
-    public Payment(Date date, int amount) {
+    public Payment(LocalDate date, int amount) {
         this.date = date;
         this.amount = amount;
     }
     
     public String toString() {
-        return "\t" + date + "\t\t$" + amount;
+        return Formatter.dateToString(date) + "\t\t$" + amount;
     }
     
     public int compareTo(Payment p) {

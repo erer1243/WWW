@@ -2,19 +2,21 @@ package wheelswithinwheels;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.DateTimeException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class Formatter {
-    public static Date stringToDate(String input) throws UIParseException {
+    public static LocalDate stringToDate(String input) throws UIParseException {
         try {
-            return format.parse(input);
-        } catch (ParseException e) {
+            return LocalDate.parse(input, dateFormat);
+        } catch (DateTimeException e) {
             throw new UIParseException(input, "date", "date");
         }
     }
     
-    public static String dateToString(Date input) {
-        return format.format(input);
+    public static String dateToString(LocalDate input) {
+        return dateFormat.format(input);
     }
     
     public static int parseInt(String input, String why) throws UIParseException {
@@ -25,5 +27,5 @@ public class Formatter {
         }
     }
     
-    protected static SimpleDateFormat format = new SimpleDateFormat("MMddYYYY");
+    protected static DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("MMddyyyy");
 }

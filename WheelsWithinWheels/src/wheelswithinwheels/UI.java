@@ -31,6 +31,11 @@ public class UI {
     
     protected Stack<String> readingFiles = new Stack<>();
     
+    public void run() throws IOException {
+        // Running breaks when parseLine returns false
+        while (parseLine(getInputLine(), false));
+    }
+    
     // Returns true if the program should continue, false on quit
     public boolean parseLine(String line, boolean isRestoring) throws IOException {
         String[] commandParts = splitStringIntoParts(line);
@@ -61,11 +66,8 @@ public class UI {
                     break;
 
                 case "addo":
-                    /* not using checkNumberArgs because addo is a special case 
-                       in that it has an optional comment of indefinite length */
-                    if (args.length < 4)
-                        System.out.println("Expected at least 4 arguments but got " + args.length);
-                    else
+                    // checkAtLeastNumberArgs because of optional comment
+                    if (checkAtLeastNumberArgs(4, args))
                         addOrder(args);
                     break;    
 
@@ -103,10 +105,6 @@ public class UI {
                     printStatements();
                     break;
                 
-                case "readc":
-                    readScript(args, false); //filenames can have spaces
-                    break;
-                    
                 case "printcname":
                     printCustomersByName();
                     break;
@@ -115,12 +113,20 @@ public class UI {
                     printCustomersByNumber();
                     break;
                     
+                // Using checkAtLeastNumberArgs so filenames can have spaces    
+                case "readc":
+                    if (checkAtLeastNumberArgs(1, args))
+                        readScript(args, false);
+                    break;
+                
                 case "savebs":
-                    saveBikeShop(args); //filenames can have spaces
+                     if (checkAtLeastNumberArgs(1, args))
+                         saveBikeShop(args); 
                     break;  
 
                 case "restorebs":
-                    restoreBikeShop(args); //filenames can have spaces
+                     if (checkAtLeastNumberArgs(1, args))
+                         restoreBikeShop(args);
                     break;
                 
                 case "rncn":
@@ -159,16 +165,19 @@ public class UI {
         return true;
     }
     
-    public void run() throws IOException {
-        // Running breaks when parseLine returns false
-        while (parseLine(getInputLine(), false));
-    }
-    
     //HELPER METHODS============================================================
     
     protected boolean checkNumberArgs(int targetArgs, String[] args) {
         if (targetArgs != args.length) {
             System.out.println("Expected " + targetArgs + " argument(s) but got " + args.length);
+            return false;
+        } else
+            return true;
+    }
+    
+    protected boolean checkAtLeastNumberArgs(int targetArgs, String[] args) {
+        if (targetArgs > args.length) {
+            System.out.println("Expected at least " + targetArgs + " argument(s) but got " + args.length);
             return false;
         } else
             return true;

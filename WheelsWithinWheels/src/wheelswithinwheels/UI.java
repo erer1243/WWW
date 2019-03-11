@@ -44,23 +44,28 @@ public class UI {
                     break;
                     
                 case "addrp":
-                    addRepairPrice(args);
+                    if (checkNumberArgs(4, args))
+                        addRepairPrice(args);
                     break;
 
                 case "addc":
-                    addCustomer(args);
+                    if (checkNumberArgs(2, args))
+                        addCustomer(args);
                     break;
 
                 case "addo":
-                    addOrder(args);
+                    if (checkNumberArgs(5, args))
+                        addOrder(args);
                     break;    
 
                 case "addp":
-                    addPayment(args);
+                    if (checkNumberArgs(3, args))
+                        addPayment(args);
                     break;
 
                 case "comp":
-                    markComplete(args);
+                    if (checkNumberArgs(2, args))
+                        markComplete(args);
                     break;    
                 
                 case "printrp":
@@ -88,7 +93,8 @@ public class UI {
                     break;
                 
                 case "readc":
-                    readScript(args, false);
+                    if (checkNumberArgs(1, args))
+                        readScript(args, false);
                     break;
                     
                 case "printcname":
@@ -100,11 +106,13 @@ public class UI {
                     break;
                     
                 case "savebs":
-                    saveBikeShop(args);
+                    if (checkNumberArgs(1, args))
+                        saveBikeShop(args);
                     break;  
 
                 case "restorebs":
-                    restoreBikeShop(args);
+                    if (checkNumberArgs(1, args))
+                        restoreBikeShop(args);
                     break;
                 
                 case "rncn":
@@ -152,6 +160,15 @@ public class UI {
     }
     
     //HELPER METHODS============================================================
+    
+    protected boolean checkNumberArgs(int targetArgs, String[] args) {
+        if (targetArgs != args.length) {
+            System.out.println("Expected " + targetArgs + " argument(s)");
+            return false;
+        }
+        
+        return true;
+    }
     
     protected String getInputLine() throws IOException {
         System.out.print("> ");

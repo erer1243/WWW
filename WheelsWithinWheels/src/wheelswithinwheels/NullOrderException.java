@@ -7,7 +7,7 @@ class NullOrderException extends BikeShopException {
         this.orderNumber = orderNumber;
     }
     
-    public int getOrderNumber () {
+    public int getOrderNumber() {
         return orderNumber;
     }
 }

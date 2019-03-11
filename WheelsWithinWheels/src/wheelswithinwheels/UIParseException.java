@@ -5,21 +5,20 @@ class UIParseException extends Exception {
     protected String argument;
     protected String expectedType;
     
-    public UIParseException (String inputted, String argument, String expectedType) {
-        super();
+    public UIParseException(String inputted, String argument, String expectedType) {
         this.inputted = inputted;
         this.argument = argument;
         this.expectedType = expectedType;
     }
     
-    public String getInputted () {
+    public String getInputted() {
         return inputted;
     }
     
-    public String getArgument () {
+    public String getArgument() {
         return argument;
     }
-    public String getExpectedType () {
+    public String getExpectedType() {
         return expectedType;
     }
 }

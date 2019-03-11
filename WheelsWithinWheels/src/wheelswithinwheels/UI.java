@@ -143,16 +143,8 @@ public class UI {
                         System.out.println("rnon is only allowed in restorebs files");
                     break;
                 
-                case "remc":
-                    removeCustomer(args);
-                    break;
-                    
-                case "remo":
-                    removeOrder(args);
-                    break;
-
                 default:
-                    System.out.println("Unknown command " + commandParts[0]);
+                    System.out.println("Unknown command \"" + commandParts[0] + "\"");
             }
         } catch (UIParseException e) {
             handleUIParseException(e);
@@ -537,14 +529,6 @@ public class UI {
     protected void restoreBikeShop(String[] args) throws IOException, UIParseException {
         reset();
         readScript(args, true);
-    }
-    
-    protected void removeCustomer(String[] args) throws UIParseException {
-        int customerNumber = Formatter.parseInt(args[0], "customer number");
-    }
-    
-    protected void removeOrder(String[] args) throws UIParseException {
-        int orderNumber = Formatter.parseInt(args[0], "order number");
     }
     
     protected void updateOrderCounter(String[] args) throws UIParseException {
